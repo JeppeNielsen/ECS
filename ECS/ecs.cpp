@@ -222,8 +222,6 @@ struct Database {
         } else {
             object = GameObjectId(objects.size());
             objects.push_back(object);
-            // traits_type::entity_mask is reserved to allow for null identifiers
-            //assert(entity < traits_type::entity_mask);
         }
         return object;
     }
