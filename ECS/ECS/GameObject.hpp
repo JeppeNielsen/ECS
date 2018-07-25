@@ -1,0 +1,46 @@
+//
+//  GameObject.hpp
+//  ECS
+//
+//  Created by Jeppe Nielsen on 25/07/2018.
+//  Copyright © 2018 Jeppe Nielsen. All rights reserved.
+//
+
+#pragma once
+#include "GameObjectId.hpp"
+
+namespace ECS {
+struct Scene;
+
+class GameObject {
+public:
+    GameObject(Scene& scene, const GameObjectId id) : scene(scene), id(id) { }
+    ~GameObject() = default;
+    GameObject(GameObject&&) = default;
+    GameObject(GameObject&) = default;
+    GameObject(const GameObject&) = default;
+
+    GameObject & operator=(const GameObject &) = default;
+    GameObject & operator=(GameObject &&) = default;
+    
+    bool operator == (const GameObject& other) const;
+    bool operator != (const GameObject& other) const;
+    
+    explicit operator bool() const;
+    
+    template<typename T>
+    T* AddComponent() const;
+    
+    template<typename T>
+    T* GetComponent() const;
+    
+    template<typename T>
+    void RemoveComponent() const;
+    
+    void Remove() const;
+
+private:
+    Scene& scene;
+    GameObjectId id;
+};
+}
