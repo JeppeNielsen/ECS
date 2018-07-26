@@ -35,10 +35,10 @@ struct Database {
         return static_cast<Container<T>&>(*components[id]);
     }
     
-    template<typename T>
-    T* AddComponent(const GameObjectId objectId) {
+    template<typename T, typename... Args>
+    T* AddComponent(const GameObjectId objectId, Args&& ... args) {
         AssureComponent<T>();
-        ComponentContainer<T>().Create(objectId);
+        ComponentContainer<T>().Create(objectId, args...);
         return ComponentContainer<T>().Get(objectId);
     }
     

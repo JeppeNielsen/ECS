@@ -39,15 +39,28 @@ struct Container : public IContainer {
     Container & operator=(const Container &) = delete;
     Container & operator=(Container &&) = default;
     
-    void Create(const GameObjectId id) {
+    void CreateIndex(const GameObjectId id) {
         assert(!Contains(id));
         const auto index = id & GameObjectIdIndexMask;
         if (index>=indicies.size()) {
             indicies.resize(index + 1, GameObjectIdNull);
         }
         indicies[index] = (std::uint32_t)elements.size();
-        elements.emplace_back(T());
         references.emplace_back(1);
+    }
+    
+    template<typename... Args>
+    std::enable_if_t<!std::is_constructible<T, Args...>::value, void>
+    Create(const GameObjectId id, Args&& ... args) {
+        CreateIndex(id);
+        elements.emplace_back(T{std::forward<Args>(args)...});
+    }
+    
+    template<typename... Args>
+    std::enable_if_t<std::is_constructible<T, Args...>::value, void>
+    Create(const GameObjectId id, Args&& ... args) {
+        CreateIndex(id);
+        elements.emplace_back(std::forward<Args>(args)...);
     }
     
     void Reference(const GameObjectId id, const GameObjectId referenceId) {

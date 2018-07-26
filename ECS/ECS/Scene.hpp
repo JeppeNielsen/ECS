@@ -51,10 +51,10 @@ private:
     
     void RemoveObject(const GameObjectId object);
     
-    template<typename T>
-    T* AddComponent(const GameObjectId object) {
+    template<typename T, typename...Args>
+    T* AddComponent(const GameObjectId object, Args&& ... args) {
         addComponentActions.insert(object);
-        return database.AddComponent<T>(object);
+        return database.AddComponent<T>(object, args...);
     }
     
     template<typename T>
@@ -83,10 +83,10 @@ private:
     Actions removeActions;
 };
   
-template<typename T>
-T* GameObject::AddComponent() const {
+template<typename T, typename... Args>
+T* GameObject::AddComponent(Args&&... args) const {
     assert(operator bool());
-    return scene.AddComponent<T>(id);
+    return scene.AddComponent<T>(id, args...);
 }
 
 template<typename T>

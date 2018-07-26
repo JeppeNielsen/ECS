@@ -28,8 +28,8 @@ public:
     
     explicit operator bool() const;
     
-    template<typename T>
-    T* AddComponent() const;
+    template<typename T, typename...Args>
+    T* AddComponent(Args&&... args) const;
     
     template<typename T>
     T* GetComponent() const;

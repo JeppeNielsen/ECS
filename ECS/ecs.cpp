@@ -51,12 +51,12 @@ int main() {
     //scene.AddComponent<Position>(object1);
     //scene.AddComponent<Velocity>(object1)->vx = 2;
     
-    object1.AddComponent<Position>()->x = 123;
-    object1.AddComponent<Velocity>();
+    object1.AddComponent<Position>(2.0f);
+    object1.AddComponent<Velocity>()->vx = 100;
     
     object1.RemoveComponent<Position>();
     
-
+    
     
     if (object1) {
         std::cout << "is valid" << std::endl;
@@ -72,7 +72,7 @@ int main() {
     
     scene.Update(1.0f);
     
-    object1.AddComponent<Position>()->x = 234;
+    object1.AddComponent<Position>(100.0f);
     
     if (!object1) {
         std::cout << "not valid" << std::endl;
