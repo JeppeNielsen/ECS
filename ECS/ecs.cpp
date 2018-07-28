@@ -41,7 +41,7 @@ struct VelocitySystem : public System<Position, Velocity> {
     }
 };
 
-int main() {
+int main_ecs() {
     
     Database database;
     Scene scene(database);
@@ -94,4 +94,6 @@ int main() {
     //scene.RemoveComponent<Position>(object1);
     scene.Update(0);
     scene.Update(0);
+    
+    return 0;
 }
