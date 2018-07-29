@@ -43,7 +43,6 @@
 		72A86D8E21091873001BCF6B /* System.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = System.hpp; sourceTree = "<group>"; };
 		72A86D90210918A2001BCF6B /* GameObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameObject.cpp; sourceTree = "<group>"; };
 		72A86D91210918A2001BCF6B /* GameObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GameObject.hpp; sourceTree = "<group>"; };
-		72A86D95210A6969001BCF6B /* TypeInfo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TypeInfo.hpp; sourceTree = "<group>"; };
 		72A86D97210A6982001BCF6B /* serialization.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = serialization.cpp; sourceTree = "<group>"; };
 		72A86D9A210B487F001BCF6B /* ClassNameHelper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ClassNameHelper.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -79,7 +78,6 @@
 			isa = PBXGroup;
 			children = (
 				72A86D99210B4867001BCF6B /* Helpers */,
-				72A86D93210A55A1001BCF6B /* Serialization */,
 				72A86D7F21090D6B001BCF6B /* ECS */,
 				726CB21F210509E4009E1412 /* ecs.cpp */,
 				72A86D97210A6982001BCF6B /* serialization.cpp */,
@@ -105,14 +103,6 @@
 				72A86D91210918A2001BCF6B /* GameObject.hpp */,
 			);
 			path = ECS;
-			sourceTree = "<group>";
-		};
-		72A86D93210A55A1001BCF6B /* Serialization */ = {
-			isa = PBXGroup;
-			children = (
-				72A86D95210A6969001BCF6B /* TypeInfo.hpp */,
-			);
-			path = Serialization;
 			sourceTree = "<group>";
 		};
 		72A86D99210B4867001BCF6B /* Helpers */ = {
