@@ -14,8 +14,46 @@
 #include <sstream>
 #include "ClassNameHelper.hpp"
 #include "IdHelper.hpp"
+#include "MetaHelper.hpp"
+
+template <typename T>
+struct HasIterateTypeMethod {
+    struct dummy { /* something */ };
+
+    template <typename C, typename P>
+    static auto test(P * p) -> decltype(std::declval<C>().IterateType(*p), std::true_type());
+
+    template <typename, typename>
+    static std::false_type test(...);
+
+    typedef decltype(test<T, dummy>(nullptr)) type;
+    static const bool value = std::is_same<std::true_type, decltype(test<T, dummy>(nullptr))>::value;
+};
+
+namespace BinarySerializer {
+
+class Serializer {
+public:
+
+    void Begin(const std::string& typeName) {
+        std::cout << "Binary begin :" << typeName << std::endl;
+    }
+
+    template<typename T>
+    void Field(const std::string& name, T& field) {
+        std::cout << name << "  :" << "" << std::endl;
+    }
+    
+    void End() {
+        std::cout << "Binary ended"  << std::endl;
+    }
+
+private:
+    
+};
 
 
+}
 
 
 namespace JsonSerializer {
@@ -25,9 +63,18 @@ struct SerializeType;
 
 class Serializer {
 public:
+
+    void Begin(const std::string& typeName) {
+        std::cout << "Type begin :" << typeName << std::endl;
+    }
+
     template<typename T>
-    void SerializeField(const std::string& name, T* field) {
-        SerializeType<T>::Serialize(*this, name, *field);
+    void Field(const std::string& name, T& field) {
+        SerializeType<T>::Serialize(*this, name, field);
+    }
+    
+    void End() {
+        std::cout << "Type ended"  << std::endl;
     }
 
 private:
@@ -76,99 +123,20 @@ struct SerializeType<std::vector<T>> {
 
 }
 
-struct IFieldInfo {
-    IFieldInfo(const std::string& name) : name(name) {}
-    virtual ~IFieldInfo() = default;
-    virtual void Set(const void* value) = 0;
-    virtual std::unique_ptr<IFieldInfo> Clone() = 0;
-    virtual void Serialize(void* serializer) = 0;
-    
-    std::string name;
-};
-
-template<typename S, typename T>
-struct FieldInfo : public IFieldInfo {
-    FieldInfo(const std::string name, T& field)
-    : IFieldInfo(name), field(&field) { }
-    
-    void Set(const void* value) override {
-        *field = *static_cast<const T*>(value);
-    }
-    
-    std::unique_ptr<IFieldInfo> Clone() override {
-        return std::make_unique<FieldInfo<S, T>>(name, *field);
-    }
-    
-    void Serialize(void* serializer) override {
-        S* s = static_cast<S*>(serializer);
-        s->template SerializeField<T>(name, field);
-    }
-    
-    T* field;
-};
-
-template<typename S>
-struct TypeInfo {
-    using Fields = std::vector<std::unique_ptr<IFieldInfo>>;
-
-    TypeInfo() = default;
-    TypeInfo(const TypeInfo& other) {
-        name = other.name;
-        for(auto& field : other.fields) {
-            fields.emplace_back(field->Clone());
-        }
-    }
-    TypeInfo(TypeInfo&&) = default;
-    TypeInfo & operator=(TypeInfo &&) = default;
-    
-    TypeInfo & operator=(const TypeInfo & other) {
-        name = other.name;
-        fields.clear();
-        for(auto& field : other.fields) {
-            fields.emplace_back(field->Clone());
-        }
-        return *this;
-    }
-    
-    template<typename T>
-    void AddField(const std::string name, T& field) {
-        fields.emplace_back(std::make_unique<FieldInfo<S, T>>(name, field));
-    }
-    
-    template<typename T>
-    void SetField(const std::string& name, const T& value) {
-        for(auto& field : fields) {
-            if (field->name == name) {
-                field->Set(&value);
-                break;
-            }
-        }
-    }
-    
-    void Serialize(S& serializer) {
-        for(auto& field : fields) {
-            field->Serialize(&serializer);
-        }
-    }
-
-    std::string name;
-    Fields fields;
-};
-
 #define TYPE_FIELDS_BEGIN \
 public: \
-template<typename S> \
-TypeInfo<S> GetType() { \
-    TypeInfo<S> type; \
-    type.name = ClassNameHelper::GetName<std::remove_pointer_t<decltype(this)>>();
+template<typename Iterator> \
+void IterateType(Iterator& iterator) { \
+    iterator.Begin(ClassNameHelper::GetName<std::remove_pointer_t<decltype(this)>>());
 
 #define TYPE_FIELD(field) \
-    type.AddField(#field, field);
+    iterator.Field(#field, field);
 
 #define TYPE_FIELDS_END \
-    return type; \
+    iterator.End(); \
 } \
 private:
+
 
 struct Position {
 
@@ -187,12 +155,36 @@ struct Position {
     TYPE_FIELDS_END
 };
 
+struct Velocity {
+    float vx;
+    float vy;
+};
 
+
+template<typename Iterator, typename T>
+void Iterate(Iterator& iterator, T& type) {
+    ECS::Meta::static_if<HasIterateTypeMethod<T>, T&>(type, [&iterator](auto& type) {
+        type.IterateType(iterator);
+    });
+}
 
 int main() {
 
-    JsonSerializer::Serializer serializer;
+    Position pos1;
+    Velocity vel1;
     
+    
+    JsonSerializer::Serializer jsonSerializer;
+    
+    Iterate(jsonSerializer, pos1);
+    Iterate(jsonSerializer, vel1);
+    
+    BinarySerializer::Serializer binarySerializer;
+    Iterate(binarySerializer, pos1);
+    Iterate(binarySerializer, vel1);
+    
+    
+    //IterateFields(pos1);
     
     /*
     serializer.AddType<float>([] (auto& name, auto& field) {
@@ -205,20 +197,20 @@ int main() {
     serializer.AddType<std::vector<I>>([] (auto& name, auto& field) {
         std::cout << "ints : " << name << "=" << field << std::endl;
     });
-    */
+    
 
     Position pos { 1,2, 999};
     pos.floats.push_back(2.0f);
     pos.floats.push_back(4.0f);
     pos.floats.push_back(6.0f);
     
+    JsonSerializer::Serializer json;
+    pos.IterateType(json);
     
-    auto type = pos.GetType<decltype(serializer)>();
-    type.SetField("x", 100.0f);
-    type.SetField("floats", std::vector<float> {5,6,7,10,20,30,40});
     
-    type.Serialize(serializer);
-    
+    BinarySerializer::Serializer binary;
+    pos.IterateType(binary);
+    */
     
     return 0;
 }
