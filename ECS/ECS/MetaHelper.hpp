@@ -23,5 +23,16 @@ for_each(const Tuple& tuple, Func&& func) {
     for_each<I + 1>(tuple, func);
 }
 
+template<typename Cond, typename Param, typename Func>
+typename std::enable_if< Cond::value, void >::type
+static_if(Param param, Func const&& func) {
+    func(param);
+}
+
+template<typename Cond, typename Param, typename Func>
+typename std::enable_if< !Cond::value, void >::type
+static_if(Param param, Func const&& func) {
+}
+
 }
 }
