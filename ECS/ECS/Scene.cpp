@@ -7,6 +7,7 @@
 //
 
 #include "Scene.hpp"
+#include "Hierarchy.hpp"
 
 using namespace ECS;
 
@@ -22,7 +23,9 @@ Scene::~Scene() {
 GameObject Scene::CreateObject() {
     const auto object = database.CreateObject();
     objects.Add(object);
-    return GameObject(*this, object);
+    GameObject go = GameObject(*this, object);
+    go.AddComponent<Hierarchy>()->owner = go;
+    return go;
 }
 
 void Scene::Update(float dt) {

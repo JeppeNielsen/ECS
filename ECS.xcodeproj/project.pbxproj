@@ -13,6 +13,7 @@
 		72A86D8C21091706001BCF6B /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D8A21091706001BCF6B /* Scene.cpp */; };
 		72A86D92210918A2001BCF6B /* GameObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D90210918A2001BCF6B /* GameObject.cpp */; };
 		72A86D98210A6982001BCF6B /* serialization.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D97210A6982001BCF6B /* serialization.cpp */; };
+		72A86D9D210E5D8E001BCF6B /* Hierarchy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D9B210E5D8E001BCF6B /* Hierarchy.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,6 +46,10 @@
 		72A86D91210918A2001BCF6B /* GameObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GameObject.hpp; sourceTree = "<group>"; };
 		72A86D97210A6982001BCF6B /* serialization.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = serialization.cpp; sourceTree = "<group>"; };
 		72A86D9A210B487F001BCF6B /* ClassNameHelper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ClassNameHelper.hpp; sourceTree = "<group>"; };
+		72A86D9B210E5D8E001BCF6B /* Hierarchy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Hierarchy.cpp; sourceTree = "<group>"; };
+		72A86D9C210E5D8E001BCF6B /* Hierarchy.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Hierarchy.hpp; sourceTree = "<group>"; };
+		72A86D9F210E5E23001BCF6B /* Event.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Event.hpp; sourceTree = "<group>"; };
+		72A86DA0210E5E23001BCF6B /* Property.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Property.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +82,7 @@
 		726CB1E120FD2ADF009E1412 /* ECS */ = {
 			isa = PBXGroup;
 			children = (
+				72A86D9E210E5E23001BCF6B /* Data */,
 				72A86D99210B4867001BCF6B /* Helpers */,
 				72A86D7F21090D6B001BCF6B /* ECS */,
 				726CB21F210509E4009E1412 /* ecs.cpp */,
@@ -101,6 +107,8 @@
 				72A86D8E21091873001BCF6B /* System.hpp */,
 				72A86D90210918A2001BCF6B /* GameObject.cpp */,
 				72A86D91210918A2001BCF6B /* GameObject.hpp */,
+				72A86D9B210E5D8E001BCF6B /* Hierarchy.cpp */,
+				72A86D9C210E5D8E001BCF6B /* Hierarchy.hpp */,
 			);
 			path = ECS;
 			sourceTree = "<group>";
@@ -111,6 +119,15 @@
 				72A86D9A210B487F001BCF6B /* ClassNameHelper.hpp */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		72A86D9E210E5E23001BCF6B /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				72A86D9F210E5E23001BCF6B /* Event.hpp */,
+				72A86DA0210E5E23001BCF6B /* Property.hpp */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -176,6 +193,7 @@
 				72A86D8921091451001BCF6B /* Database.cpp in Sources */,
 				72A86D98210A6982001BCF6B /* serialization.cpp in Sources */,
 				726CB221210509E4009E1412 /* ecs.cpp in Sources */,
+				72A86D9D210E5D8E001BCF6B /* Hierarchy.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

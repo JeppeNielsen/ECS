@@ -15,6 +15,7 @@
 #include "ClassNameHelper.hpp"
 #include "IdHelper.hpp"
 #include "MetaHelper.hpp"
+#include "Hierarchy.hpp"
 
 template <typename T>
 struct HasIterateTypeMethod {
@@ -168,7 +169,7 @@ void Iterate(Iterator& iterator, T& type) {
     });
 }
 
-int main() {
+int main_serialize() {
 
     Position pos1;
     Velocity vel1;
@@ -212,5 +213,6 @@ int main() {
     pos.IterateType(binary);
     */
     
+   
     return 0;
 }

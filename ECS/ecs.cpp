@@ -9,6 +9,7 @@
 #include <iostream>
 
 #include "Scene.hpp"
+#include "Hierarchy.hpp"
 
 using namespace ECS;
 
@@ -41,7 +42,7 @@ struct VelocitySystem : public System<Position, Velocity> {
     }
 };
 
-int main_ecs() {
+int main() {
     
     Database database;
     Scene scene(database);
@@ -94,6 +95,22 @@ int main_ecs() {
     //scene.RemoveComponent<Position>(object1);
     scene.Update(0);
     scene.Update(0);
+    
+    
+    auto parent = scene.CreateObject();
+    
+    auto child1 = scene.CreateObject();
+    child1.Hierarchy().Parent = parent;
+    
+    auto child2 = scene.CreateObject();
+    child2.Hierarchy().Parent = parent;
+    
+
+    auto& parentHierarchy = parent.Hierarchy();
+    
+    parent.Hierarchy().IterateChildren([](GameObject go){
+        std::cout << go.Id() << std::endl;
+    });
     
     return 0;
 }

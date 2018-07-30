@@ -10,6 +10,7 @@
 
 #include "GameObjectId.hpp"
 #include <vector>
+#include <deque>
 #include <assert.h>
 
 namespace ECS {
@@ -97,7 +98,7 @@ struct Container : public IContainer {
         return &elements[indicies[index]];
     }
     
-    std::vector<T> elements;
+    std::deque<T> elements;
     std::vector<std::uint16_t> references;
 };
 

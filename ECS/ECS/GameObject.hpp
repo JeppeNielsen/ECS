@@ -10,11 +10,14 @@
 #include "GameObjectId.hpp"
 
 namespace ECS {
-struct Scene;
+class Scene;
+class Hierarchy;
 
 class GameObject {
 public:
-    GameObject(Scene& scene, const GameObjectId id) : scene(scene), id(id) { }
+    GameObject();
+    GameObject(Scene& scene, const GameObjectId id);
+    GameObject(void* null);
     ~GameObject() = default;
     GameObject(GameObject&&) = default;
     GameObject(GameObject&) = default;
@@ -39,8 +42,10 @@ public:
     
     void Remove() const;
 
+    Hierarchy& Hierarchy() const;
+    GameObjectId Id() const;
 private:
-    Scene& scene;
+    Scene* scene;
     GameObjectId id;
 };
 }

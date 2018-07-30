@@ -8,22 +8,41 @@
 
 #include "GameObject.hpp"
 #include "Scene.hpp"
+#include "Hierarchy.hpp"
 
 using namespace ECS;
 
+GameObject::GameObject() : scene(nullptr), id(GameObjectIdNull) {
+
+}
+
+GameObject::GameObject(Scene& scene, const GameObjectId id) : scene(&scene), id(id) {
+
+}
+
+GameObject::GameObject(void*) : scene(nullptr), id(GameObjectIdNull) {
+}
+
 bool GameObject::operator == (const GameObject& other) const {
-    return id == other.id && &scene == &other.scene;
+    return id == other.id && scene == other.scene;
 }
 
 bool GameObject::operator != (const GameObject& other) const {
-    return !(id == other.id && &scene == &other.scene);
+    return !(id == other.id && scene == other.scene);
 }
 
 GameObject::operator bool() const {
-    return scene.database.GameObjectIdValid(id);
+    if (!scene) return false;
+    return scene->database.GameObjectIdValid(id);
 }
 
 void GameObject::Remove() const {
     assert(operator bool());
-    scene.RemoveObject(id);
+    scene->RemoveObject(id);
 }
+
+Hierarchy& GameObject::Hierarchy() const {
+    return *GetComponent<class Hierarchy>();
+}
+
+GameObjectId GameObject::Id() const { return id; }
