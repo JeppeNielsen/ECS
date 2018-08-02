@@ -101,6 +101,12 @@ void GameObject::RemoveComponent() const {
     scene->RemoveComponent<T>(id);
 }
 
+template<typename Func>
+void GameObject::IterateComponents(Func&& func) const {
+    assert(operator bool());
+    scene->database.IterateComponents(id, func);
+}
+
 template<typename...T>
 void System<T...>::Initialize(Scene& scene) {
     this->scene = &scene;

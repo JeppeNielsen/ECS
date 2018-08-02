@@ -12,6 +12,8 @@
 #include <vector>
 #include <deque>
 #include <assert.h>
+#include "MetaHelper.hpp"
+#include "FieldVisitor.hpp"
 
 namespace ECS {
 
@@ -24,6 +26,8 @@ struct IContainer {
     }
     
     virtual void Destroy(const GameObjectId object) = 0;
+    
+    virtual void VisitFields(const GameObjectId id, FieldVisitor& fieldVisitor) = 0;
     
     std::vector<std::uint32_t> indicies;
 };
@@ -96,6 +100,18 @@ struct Container : public IContainer {
     T* Get(const GameObjectId id) {
         const auto index = id & GameObjectIdIndexMask;
         return &elements[indicies[index]];
+    }
+    
+    template<typename Visitor, typename Type>
+    static void TryVisitFields(Visitor& visitor, Type& type) {
+        ECS::Meta::static_if<HasVisitFieldsMethod<Type>, Type&>(type, [&visitor](auto& type) {
+            type.VisitFields(visitor);
+        });
+    }
+    
+    void VisitFields(const GameObjectId id, FieldVisitor& fieldVisitor) override {
+        T* instance = Get(id);
+        TryVisitFields(fieldVisitor, *instance);
     }
     
     std::deque<T> elements;

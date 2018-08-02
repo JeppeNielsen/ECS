@@ -15,11 +15,13 @@
 #include "ClassNameHelper.hpp"
 #include "IdHelper.hpp"
 #include "MetaHelper.hpp"
-#include "Hierarchy.hpp"
+#include "Scene.hpp"
 
+using namespace ECS;
+/*
 template <typename T>
 struct HasIterateTypeMethod {
-    struct dummy { /* something */ };
+    struct dummy {  };
 
     template <typename C, typename P>
     static auto test(P * p) -> decltype(std::declval<C>().IterateType(*p), std::true_type());
@@ -57,13 +59,88 @@ private:
 }
 
 
-namespace JsonSerializer {
+namespace ECS {
 
-template<typename T, typename I = void>
-struct SerializeType;
+struct FieldIterator;
 
-class Serializer {
+namespace FieldIteratorInternal {
+    template<typename T, typename I = void>
+    struct FieldDelegator;
+}
+
+struct FieldIterator {
+    void Begin(const std::string& typeName) {
+        std::cout << "Type begin :" << typeName << std::endl;
+    }
+
+    template<typename T>
+    void Field(const std::string& name, T& field) {
+        FieldIteratorInternal::FieldDelegator<T>::Iterate(*this, name, field);
+    }
+    
+    template<typename T>
+    void Iterate(const std::string& name, T& field) {
+        std::cout << name << std::endl;
+    }
+    
+    template<typename T>
+    void IterateVector(const std::string& name, const std::vector<T>& vector) {
+        std::cout << "vector" << std::endl;
+        for(auto& e : vector) {
+            Iterate(name, e);
+        }
+    }
+    
+    void End() {
+        std::cout << "Type ended" << std::endl;
+    }
+};
+
+namespace FieldIteratorInternal {
+    template<typename T, typename I>
+    struct FieldDelegator {
+        static void Iterate(FieldIterator& iterator, const std::string& name, const T& field) {
+            iterator.Iterate(name, field);
+        }
+    };
+    
+    template<typename T>
+    struct FieldDelegator<std::vector<T>> {
+        static void Iterate(FieldIterator& iterator, const std::string& name, const std::vector<T>& field) {
+            iterator.IterateVector(name, field);
+        }
+    };
+}
+}
+
+*/
+
+class JsonSerializer {
 public:
+
+    ECS::FieldVisitor fieldVisitor;
+    
+    JsonSerializer() {
+        fieldVisitor.OnField<int>([](const std::string& name, int& field) {
+            std::cout << "Ints -> " << name << " " << field << std::endl;
+        });
+        
+        fieldVisitor.OnField<float>([](const std::string& name, float& field) {
+            std::cout << "Floats -> " << name <<" "<< field << std::endl;
+        });
+        
+        fieldVisitor.OnField<std::string>([](const std::string& name, std::string& field) {
+            std::cout << "String -> " << name << " "<< field << std::endl;
+        });
+        
+        fieldVisitor.OnBegin([] (const std::string& type) {
+            std::cout << "Type started : "<<type << std::endl;
+        });
+        
+        fieldVisitor.OnEnd([] (const std::string& type) {
+            std::cout << "Type ended : "<<type << std::endl;
+        });
+    }
 
     void Begin(const std::string& typeName) {
         std::cout << "Type begin :" << typeName << std::endl;
@@ -71,17 +148,24 @@ public:
 
     template<typename T>
     void Field(const std::string& name, T& field) {
-        SerializeType<T>::Serialize(*this, name, field);
+        
     }
     
     void End() {
-        std::cout << "Type ended"  << std::endl;
+        std::cout << "Type ended" << std::endl;
     }
-
+    
+    void SerializeObject(GameObject root, std::ostream& stream) {
+        root.IterateComponents([root, this](auto& componentType) {
+            componentType->VisitFields(root.Id(), fieldVisitor);
+        });
+    }
+    
 private:
     
 };
 
+/*
 template<typename T, typename I>
 struct SerializeType {
     static void Serialize(Serializer& serializer, const std::string& name, const T& field) {
@@ -122,12 +206,12 @@ struct SerializeType<std::vector<T>> {
     }
 };
 
-}
+
 
 #define TYPE_FIELDS_BEGIN \
 public: \
 template<typename Iterator> \
-void IterateType(Iterator& iterator) { \
+void IterateFields(Iterator& iterator) { \
     iterator.Begin(ClassNameHelper::GetName<std::remove_pointer_t<decltype(this)>>());
 
 #define TYPE_FIELD(field) \
@@ -137,22 +221,27 @@ void IterateType(Iterator& iterator) { \
     iterator.End(); \
 } \
 private:
+*/
 
+struct Node {
+    std::string name;
+    float width;
+    
+    TYPE_FIELDS_BEGIN
+    TYPE_FIELD(name)
+    TYPE_FIELD(width)
+    TYPE_FIELDS_END
+};
 
 struct Position {
 
-    float x;
-    float y;
-    int hello;
+    
     std::string name;
-    std::vector<float> floats;
+    Node node;
 
     TYPE_FIELDS_BEGIN
-    TYPE_FIELD(x)
-    TYPE_FIELD(y)
-    TYPE_FIELD(hello)
     TYPE_FIELD(name)
-    TYPE_FIELD(floats)
+    TYPE_FIELD(node)
     TYPE_FIELDS_END
 };
 
@@ -161,58 +250,18 @@ struct Velocity {
     float vy;
 };
 
+int main() {
 
-template<typename Iterator, typename T>
-void Iterate(Iterator& iterator, T& type) {
-    ECS::Meta::static_if<HasIterateTypeMethod<T>, T&>(type, [&iterator](auto& type) {
-        type.IterateType(iterator);
-    });
-}
 
-int main_serialize() {
+    Database database;
+    Scene scene(database);
+    auto go = scene.CreateObject();
+    Node node {"First node",  3.0f };
+    go.AddComponent<Position>("jeppe", node );
+    go.AddComponent<Velocity>(2.0f,4.0f);
+    
+    JsonSerializer jsonSerializer;
+    jsonSerializer.SerializeObject(go, std::cout);
 
-    Position pos1;
-    Velocity vel1;
-    
-    
-    JsonSerializer::Serializer jsonSerializer;
-    
-    Iterate(jsonSerializer, pos1);
-    Iterate(jsonSerializer, vel1);
-    
-    BinarySerializer::Serializer binarySerializer;
-    Iterate(binarySerializer, pos1);
-    Iterate(binarySerializer, vel1);
-    
-    
-    //IterateFields(pos1);
-    
-    /*
-    serializer.AddType<float>([] (auto& name, auto& field) {
-        std::cout << "floats : " << name << "=" << field << std::endl;
-    });
-    serializer.AddType<int>([] (auto& name, auto& field) {
-        std::cout << "ints : " << name << "=" << field << std::endl;
-    });
-    
-    serializer.AddType<std::vector<I>>([] (auto& name, auto& field) {
-        std::cout << "ints : " << name << "=" << field << std::endl;
-    });
-    
-
-    Position pos { 1,2, 999};
-    pos.floats.push_back(2.0f);
-    pos.floats.push_back(4.0f);
-    pos.floats.push_back(6.0f);
-    
-    JsonSerializer::Serializer json;
-    pos.IterateType(json);
-    
-    
-    BinarySerializer::Serializer binary;
-    pos.IterateType(binary);
-    */
-    
-   
     return 0;
 }

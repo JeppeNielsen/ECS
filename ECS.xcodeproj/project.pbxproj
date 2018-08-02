@@ -50,6 +50,7 @@
 		72A86D9C210E5D8E001BCF6B /* Hierarchy.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Hierarchy.hpp; sourceTree = "<group>"; };
 		72A86D9F210E5E23001BCF6B /* Event.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Event.hpp; sourceTree = "<group>"; };
 		72A86DA0210E5E23001BCF6B /* Property.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Property.hpp; sourceTree = "<group>"; };
+		72A86DA121131506001BCF6B /* FieldVisitor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FieldVisitor.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,21 +95,22 @@
 		72A86D7F21090D6B001BCF6B /* ECS */ = {
 			isa = PBXGroup;
 			children = (
-				72A86D8021090E98001BCF6B /* MetaHelper.hpp */,
-				72A86D8121090F9D001BCF6B /* IdHelper.hpp */,
 				72A86D8221091083001BCF6B /* Container.hpp */,
-				72A86D83210910D6001BCF6B /* GameObjectId.hpp */,
-				72A86D8421091268001BCF6B /* ObjectList.cpp */,
-				72A86D8521091268001BCF6B /* ObjectList.hpp */,
 				72A86D8721091451001BCF6B /* Database.cpp */,
 				72A86D8821091451001BCF6B /* Database.hpp */,
+				72A86DA121131506001BCF6B /* FieldVisitor.hpp */,
+				72A86D90210918A2001BCF6B /* GameObject.cpp */,
+				72A86D91210918A2001BCF6B /* GameObject.hpp */,
+				72A86D83210910D6001BCF6B /* GameObjectId.hpp */,
+				72A86D9B210E5D8E001BCF6B /* Hierarchy.cpp */,
+				72A86D9C210E5D8E001BCF6B /* Hierarchy.hpp */,
+				72A86D8121090F9D001BCF6B /* IdHelper.hpp */,
+				72A86D8021090E98001BCF6B /* MetaHelper.hpp */,
+				72A86D8421091268001BCF6B /* ObjectList.cpp */,
+				72A86D8521091268001BCF6B /* ObjectList.hpp */,
 				72A86D8A21091706001BCF6B /* Scene.cpp */,
 				72A86D8B21091706001BCF6B /* Scene.hpp */,
 				72A86D8E21091873001BCF6B /* System.hpp */,
-				72A86D90210918A2001BCF6B /* GameObject.cpp */,
-				72A86D91210918A2001BCF6B /* GameObject.hpp */,
-				72A86D9B210E5D8E001BCF6B /* Hierarchy.cpp */,
-				72A86D9C210E5D8E001BCF6B /* Hierarchy.hpp */,
 			);
 			path = ECS;
 			sourceTree = "<group>";

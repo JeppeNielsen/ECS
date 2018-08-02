@@ -42,7 +42,7 @@ struct VelocitySystem : public System<Position, Velocity> {
     }
 };
 
-int main() {
+int main_ecs() {
     
     Database database;
     Scene scene(database);

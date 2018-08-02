@@ -30,7 +30,7 @@ struct Database {
     }
     
     template<typename T>
-    Container<T>& ComponentContainer() {
+    Container<T>& ComponentContainer() const {
         const auto id = IdHelper::GetId<T>();
         return static_cast<Container<T>&>(*components[id]);
     }
@@ -43,11 +43,19 @@ struct Database {
     }
     
     template<typename T>
-    T* GetComponent(const GameObjectId objectId) {
+    T* GetComponent(const GameObjectId objectId) const {
         const auto componentId = IdHelper::GetId<T>();
         if (componentId>=components.size()) return nullptr;
         auto& container = ComponentContainer<T>();
         return container.Contains(objectId) ? container.Get(objectId) : nullptr;
+    }
+    
+    template<typename Func>
+    void IterateComponents(const GameObjectId objectId, Func&& func) const {
+        for(auto& component : components) {
+            if (!component->Contains(objectId)) continue;
+            func(component);
+        }
     }
     
     void RemoveComponent(const GameObjectId objectId, const std::size_t componentId);

@@ -40,6 +40,9 @@ public:
     template<typename T>
     void RemoveComponent() const;
     
+    template<typename Func>
+    void IterateComponents(Func&& func) const;
+    
     void Remove() const;
 
     Hierarchy& Hierarchy() const;
