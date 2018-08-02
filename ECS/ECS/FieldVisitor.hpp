@@ -10,10 +10,11 @@
 #include <iostream>
 #include "ClassNameHelper.hpp"
 #include "IdHelper.hpp"
+#include <vector>
 
 namespace ECS {
 
-struct FieldVisitor;
+class FieldVisitor;
     
 template <typename T>
 struct HasVisitFieldsMethod {

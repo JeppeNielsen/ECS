@@ -12,6 +12,7 @@
 #include <set>
 #include <assert.h>
 #include "GameObject.hpp"
+#include "Hierarchy.hpp"
 
 namespace ECS {
 

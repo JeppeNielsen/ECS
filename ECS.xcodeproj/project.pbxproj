@@ -14,6 +14,7 @@
 		72A86D92210918A2001BCF6B /* GameObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D90210918A2001BCF6B /* GameObject.cpp */; };
 		72A86D98210A6982001BCF6B /* serialization.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D97210A6982001BCF6B /* serialization.cpp */; };
 		72A86D9D210E5D8E001BCF6B /* Hierarchy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D9B210E5D8E001BCF6B /* Hierarchy.cpp */; };
+		72A86DA521139742001BCF6B /* JsonSerializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86DA321139742001BCF6B /* JsonSerializer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,6 +52,8 @@
 		72A86D9F210E5E23001BCF6B /* Event.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Event.hpp; sourceTree = "<group>"; };
 		72A86DA0210E5E23001BCF6B /* Property.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Property.hpp; sourceTree = "<group>"; };
 		72A86DA121131506001BCF6B /* FieldVisitor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FieldVisitor.hpp; sourceTree = "<group>"; };
+		72A86DA321139742001BCF6B /* JsonSerializer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = JsonSerializer.cpp; path = ECS/Serialization/JsonSerializer.cpp; sourceTree = SOURCE_ROOT; };
+		72A86DA421139742001BCF6B /* JsonSerializer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = JsonSerializer.hpp; path = ECS/Serialization/JsonSerializer.hpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +86,7 @@
 		726CB1E120FD2ADF009E1412 /* ECS */ = {
 			isa = PBXGroup;
 			children = (
+				72A86DA221139651001BCF6B /* Serialization */,
 				72A86D9E210E5E23001BCF6B /* Data */,
 				72A86D99210B4867001BCF6B /* Helpers */,
 				72A86D7F21090D6B001BCF6B /* ECS */,
@@ -130,6 +134,16 @@
 				72A86DA0210E5E23001BCF6B /* Property.hpp */,
 			);
 			path = Data;
+			sourceTree = "<group>";
+		};
+		72A86DA221139651001BCF6B /* Serialization */ = {
+			isa = PBXGroup;
+			children = (
+				72A86DA321139742001BCF6B /* JsonSerializer.cpp */,
+				72A86DA421139742001BCF6B /* JsonSerializer.hpp */,
+			);
+			name = Serialization;
+			path = Serializations;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,6 +210,7 @@
 				72A86D98210A6982001BCF6B /* serialization.cpp in Sources */,
 				726CB221210509E4009E1412 /* ecs.cpp in Sources */,
 				72A86D9D210E5D8E001BCF6B /* Hierarchy.cpp in Sources */,
+				72A86DA521139742001BCF6B /* JsonSerializer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,7 +7,6 @@
 //
 
 #include "Scene.hpp"
-#include "Hierarchy.hpp"
 
 using namespace ECS;
 
