@@ -11,6 +11,7 @@
 #include "ClassNameHelper.hpp"
 #include "IdHelper.hpp"
 #include <vector>
+#include "MetaHelper.hpp"
 
 namespace ECS {
 
@@ -61,9 +62,17 @@ public:
         if (id>=fields.size()) {
             fields.resize(id + 1, nullptr);
         }
-        fields[id] = [&func] (const std::string& name, void* ptr) {
+        fields[id] = [func] (const std::string& name, void* ptr) {
             func(name, *static_cast<T*>(ptr));
         };
+    }
+    
+    template<typename ...T, typename Func>
+    void OnFieldMultiple(Func&& func) {
+        std::tuple<T*...> types;
+        Meta::for_each(types, [this, func](const auto* type) {
+            OnField<std::remove_const_t<std::remove_pointer_t<decltype(type)>>>(func);
+        });
     }
     
     void OnBegin(const TypeNameFunction& function) {
@@ -73,7 +82,14 @@ public:
     void OnEnd(const TypeNameFunction& function) {
         onEnd = function;
     }
+    
+    void OnVectorBegin(const TypeNameFunction& function) {
+        onVectorBegin = function;
+    }
 
+    void OnVectorEnd(const TypeNameFunction& function) {
+        onVectorEnd = function;
+    }
 private:
     template<typename T>
     void Visit(const std::string& name, T& field) {
@@ -85,10 +101,11 @@ private:
     
     template<typename T>
     void VisitVector(const std::string& name, std::vector<T>& vector) {
-        std::cout << "vector" << std::endl;
+        onVectorBegin(name);
         for(auto& e : vector) {
-            Visit(name, e);
+            Field(name, e);
         }
+        onVectorEnd(name);
     }
     
     template<typename T, typename I>
@@ -97,6 +114,8 @@ private:
     Fields fields;
     TypeNameFunction onBegin;
     TypeNameFunction onEnd;
+    TypeNameFunction onVectorBegin;
+    TypeNameFunction onVectorEnd;
 };
 
 namespace FieldVisitorDetails {
@@ -131,7 +150,7 @@ namespace FieldVisitorDetails {
 public: \
 template<typename Visitor> \
 void VisitFields(Visitor& visitor) { \
-    const auto& name = ClassNameHelper::GetName<std::remove_pointer_t<decltype(this)>>(); \
+    const static auto& name = ClassNameHelper::GetName<std::remove_pointer_t<decltype(this)>>(); \
     visitor.Begin(name);
 
 #define TYPE_FIELD(field) \

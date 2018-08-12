@@ -15,11 +15,11 @@
 using namespace ECS;
 
 struct Node {
-    std::string name;
+    std::string nodeName;
     float width;
     
     TYPE_FIELDS_BEGIN
-    TYPE_FIELD(name)
+    TYPE_FIELD(nodeName)
     TYPE_FIELD(width)
     TYPE_FIELDS_END
 };
@@ -36,13 +36,22 @@ struct Position {
     TYPE_FIELDS_END
 };
 
+struct NodeList {
+    std::vector<Node> nodes;
+    
+    TYPE_FIELDS_BEGIN
+    TYPE_FIELD(nodes)
+    TYPE_FIELDS_END
+};
+
 struct Velocity {
     float vx;
     float vy;
+    
+    
 };
 
 int main() {
-
 
     Database database;
     Scene scene(database);
@@ -50,10 +59,21 @@ int main() {
     Node node {"First node",  3.0f };
     parent.AddComponent<Position>("jeppe", node );
     parent.AddComponent<Velocity>(2.0f,4.0f);
+    parent.AddComponent<NodeList>(std::vector<Node> {
+        { "First node", 10.0f},
+        { "Second node", 20.0f},
+        { "Third node", 30.0f},
+    });
     
     auto child = scene.CreateObject();
     child.AddComponent<Position>("Jeppe", node);
     child.Hierarchy().Parent = parent;
+    
+    
+    Node node2 {"Second node",  3000.0f };
+    auto child2 = scene.CreateObject();
+    child2.AddComponent<Position>("Jeppe", node2);
+    child2.Hierarchy().Parent = parent;
     
     JsonSerializer jsonSerializer;
     jsonSerializer.SerializeObject(parent, std::cout);
