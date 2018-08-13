@@ -16,7 +16,7 @@
 
 namespace ECS {
 
-struct Scene {
+class Scene {
     using SystemIdHelper = IdHelper<struct SystemIdHelper>;
     using Systems = std::vector<std::unique_ptr<ISystem>>;
     using Actions = std::set<GameObjectId>;
@@ -24,6 +24,7 @@ struct Scene {
     
     friend class GameObject;
     
+public:
     Scene(Database& database);
     ~Scene();
 

@@ -9,8 +9,10 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
 #include "Scene.hpp"
 #include "JsonSerializer.hpp"
+#include "JsonDeserializer.hpp"
 
 using namespace ECS;
 
@@ -76,7 +78,16 @@ int main() {
     child2.Hierarchy().Parent = parent;
     
     JsonSerializer jsonSerializer;
-    jsonSerializer.SerializeObject(parent, std::cout);
-
+    
+    std::stringstream stream;
+    
+    jsonSerializer.SerializeObject(parent, stream);
+    std::cout << stream.str() << std::endl;
+    
+    JsonDeserializer deserializer;
+    
+    GameObject deserializedObject = scene.CreateObject();
+    deserializer.DeserializeObject(deserializedObject, stream);
+    
     return 0;
 }

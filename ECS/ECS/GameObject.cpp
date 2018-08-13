@@ -16,7 +16,7 @@ GameObject::GameObject() : scene(nullptr), id(GameObjectIdNull) {
 
 }
 
-GameObject::GameObject(Scene& scene, const GameObjectId id) : scene(&scene), id(id) {
+GameObject::GameObject(class Scene& scene, const GameObjectId id) : scene(&scene), id(id) {
 
 }
 
@@ -46,3 +46,5 @@ Hierarchy& GameObject::Hierarchy() const {
 }
 
 GameObjectId GameObject::Id() const { return id; }
+
+Scene& GameObject::Scene() const { return *scene; }

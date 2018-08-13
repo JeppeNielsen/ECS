@@ -16,6 +16,7 @@
 		72A86D9D210E5D8E001BCF6B /* Hierarchy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D9B210E5D8E001BCF6B /* Hierarchy.cpp */; };
 		72A86DA521139742001BCF6B /* JsonSerializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86DA321139742001BCF6B /* JsonSerializer.cpp */; };
 		72A86DAA2116F0DD001BCF6B /* testPartialSpecializations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86DA92116F0DD001BCF6B /* testPartialSpecializations.cpp */; };
+		72A86DAD2122116D001BCF6B /* JsonDeserializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86DAC2122116C001BCF6B /* JsonDeserializer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -58,6 +59,8 @@
 		72A86DA72113A8CD001BCF6B /* minijson_reader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = minijson_reader.hpp; sourceTree = "<group>"; };
 		72A86DA82113A8CD001BCF6B /* minijson_writer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = minijson_writer.hpp; sourceTree = "<group>"; };
 		72A86DA92116F0DD001BCF6B /* testPartialSpecializations.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testPartialSpecializations.cpp; sourceTree = "<group>"; };
+		72A86DAB2122116C001BCF6B /* JsonDeserializer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = JsonDeserializer.hpp; path = ECS/Serialization/JsonDeserializer.hpp; sourceTree = SOURCE_ROOT; };
+		72A86DAC2122116C001BCF6B /* JsonDeserializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JsonDeserializer.cpp; path = ECS/Serialization/JsonDeserializer.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +148,8 @@
 		72A86DA221139651001BCF6B /* Serialization */ = {
 			isa = PBXGroup;
 			children = (
+				72A86DAC2122116C001BCF6B /* JsonDeserializer.cpp */,
+				72A86DAB2122116C001BCF6B /* JsonDeserializer.hpp */,
 				72A86DA321139742001BCF6B /* JsonSerializer.cpp */,
 				72A86DA421139742001BCF6B /* JsonSerializer.hpp */,
 			);
@@ -220,6 +225,7 @@
 			files = (
 				72A86D8C21091706001BCF6B /* Scene.cpp in Sources */,
 				72A86DAA2116F0DD001BCF6B /* testPartialSpecializations.cpp in Sources */,
+				72A86DAD2122116D001BCF6B /* JsonDeserializer.cpp in Sources */,
 				72A86D92210918A2001BCF6B /* GameObject.cpp in Sources */,
 				72A86D8621091268001BCF6B /* ObjectList.cpp in Sources */,
 				72A86D8921091451001BCF6B /* Database.cpp in Sources */,

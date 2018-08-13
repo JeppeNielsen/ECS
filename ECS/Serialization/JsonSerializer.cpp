@@ -47,11 +47,15 @@ void JsonSerializer::SerializeObject(GameObject go, std::ostream& stream) {
 
 void JsonSerializer::Serialize(GameObject go) {
     stack.Push("GameObject");
+    stack.Push("Components");
     go.IterateComponents([go, this](auto& componentType) {
+        //stack.Push("");
         componentType->VisitFields(go.Id(), fieldVisitor);
+        //stack.Pop();
     });
+    stack.Pop();
     if (!go.Hierarchy().Children().empty()) {
-        stack.PushArray("Children");
+        stack.Push("Children");
         for(auto child : go.Hierarchy().Children()) {
             Serialize(child);
         }

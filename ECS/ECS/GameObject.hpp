@@ -47,8 +47,9 @@ public:
 
     Hierarchy& Hierarchy() const;
     GameObjectId Id() const;
+    Scene& Scene() const;
 private:
-    Scene* scene;
+    class Scene* scene;
     GameObjectId id;
 };
 }
