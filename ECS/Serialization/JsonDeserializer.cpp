@@ -44,7 +44,7 @@ void JsonDeserializer::DeserializeObject(GameObject object, std::istream& stream
             }
         });
     } catch (minijson::parse_error e) {
-        std::cout << e.what() << std::endl;
+        std::cout << e.what() << " at position: " << e.offset() << std::endl;
     }
 }
 

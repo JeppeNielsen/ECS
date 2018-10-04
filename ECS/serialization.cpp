@@ -26,18 +26,6 @@ struct Node {
     TYPE_FIELDS_END
 };
 
-struct Position {
-
-    
-    std::string name;
-    Node node;
-
-    TYPE_FIELDS_BEGIN
-    TYPE_FIELD(name)
-    TYPE_FIELD(node)
-    TYPE_FIELDS_END
-};
-
 struct NodeList {
     std::vector<Node> nodes;
     
@@ -46,6 +34,22 @@ struct NodeList {
     TYPE_FIELDS_END
 };
 
+struct Position {
+
+    
+    std::string name;
+    Node node;
+    NodeList list;
+
+    TYPE_FIELDS_BEGIN
+    TYPE_FIELD(name)
+    TYPE_FIELD(node)
+    TYPE_FIELD(list)
+    TYPE_FIELDS_END
+};
+
+
+
 struct Velocity {
     float vx;
     float vy;
@@ -53,7 +57,7 @@ struct Velocity {
     
 };
 
-int main() {
+int main_serialization() {
 
     Database database;
     Scene scene(database);
@@ -88,6 +92,11 @@ int main() {
     
     GameObject deserializedObject = scene.CreateObject();
     deserializer.DeserializeObject(deserializedObject, stream);
+    
+    {
+        JsonSerializer outSerializer;
+        outSerializer.SerializeObject(deserializedObject, std::cout);
+    }
     
     return 0;
 }
