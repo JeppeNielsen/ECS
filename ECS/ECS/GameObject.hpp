@@ -35,6 +35,9 @@ public:
     T* AddComponent(Args&&... args) const;
     
     template<typename T>
+    T* AddReferenceComponent(const GameObject& reference) const;
+    
+    template<typename T>
     T* GetComponent() const;
     
     template<typename T>

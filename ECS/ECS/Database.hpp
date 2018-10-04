@@ -45,6 +45,13 @@ struct Database {
     }
     
     template<typename T>
+    T* AddReferenceComponent(const GameObjectId objectId, const GameObjectId referenceId) {
+        AssureComponent<T>();
+        ComponentContainer<T>().Reference(objectId, referenceId);
+        return ComponentContainer<T>().Get(objectId);
+    }
+    
+    template<typename T>
     T* GetComponent(const GameObjectId objectId) const {
         const auto componentId = IdHelper::GetId<T>();
         if (componentId>=componentsIndexed.size()) return nullptr;

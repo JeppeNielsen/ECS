@@ -65,6 +65,12 @@ private:
     }
     
     template<typename T>
+    T* AddReferenceComponent(const GameObjectId object, const GameObjectId referenceId) {
+        addComponentActions.insert(object);
+        return database.AddReferenceComponent<T>(object, referenceId);
+    }
+    
+    template<typename T>
     void RemoveComponent(const GameObjectId object) {
         const auto id = Database::IdHelper::GetId<T>();
         removeComponentActions.insert(std::make_pair(object, id));
@@ -95,6 +101,12 @@ template<typename T, typename... Args>
 T* GameObject::AddComponent(Args&&... args) const {
     assert(operator bool());
     return scene->AddComponent<T>(id, args...);
+}
+
+template<typename T>
+T* GameObject::AddReferenceComponent(const GameObject& referenceId) const {
+    assert(operator bool());
+    return scene->AddReferenceComponent<T>(id, referenceId.id);
 }
 
 template<typename T>
