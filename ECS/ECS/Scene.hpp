@@ -18,7 +18,9 @@ namespace ECS {
 
 class Scene {
     using SystemIdHelper = IdHelper<struct SystemIdHelper>;
-    using Systems = std::vector<std::unique_ptr<ISystem>>;
+    using SystemsIndexed = std::vector<std::unique_ptr<ISystem>>;
+    using Systems = std::vector<ISystem*>;
+    
     using Actions = std::set<GameObjectId>;
     using RemoveComponentActions = std::set<std::pair<GameObjectId, size_t>>;
     
@@ -31,16 +33,17 @@ public:
     template<typename S>
     S& CreateSystem() {
         const auto systemId = SystemIdHelper::GetId<S>();
-        if (systemId>=systems.size()) {
-            systems.resize(systemId + 1);
+        if (systemId>=systemsIndexed.size()) {
+            systemsIndexed.resize(systemId + 1);
         }
-        if (!systems[systemId]) {
-            systems[systemId] = std::make_unique<S>();
-            S& system = static_cast<S&>(*systems[systemId]);
+        if (!systemsIndexed[systemId]) {
+            systemsIndexed[systemId] = std::make_unique<S>();
+            S& system = static_cast<S&>(*systemsIndexed[systemId]);
             system.Initialize(*this);
+            systems.push_back(&system);
             return system;
         } else {
-            return static_cast<S&>(*systems[systemId]);
+            return static_cast<S&>(*systemsIndexed[systemId]);
         }
     }
     
@@ -49,6 +52,8 @@ public:
     void Update(float dt);
     
     Database& GetDatabase() const;
+    
+    bool IsEmpty() const;
 private:
     
     void RemoveObject(const GameObjectId object);
@@ -78,6 +83,7 @@ private:
     void RemoveObjectFromDatabase(const GameObjectId object);
 
     Database& database;
+    SystemsIndexed systemsIndexed;
     Systems systems;
     ObjectList objects;
     Actions addComponentActions;

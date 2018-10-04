@@ -17,22 +17,24 @@ struct Scene;
 
 struct Database {
     using IdHelper = IdHelper<struct ComponentId>;
-    using Components = std::vector<std::unique_ptr<IContainer>>;
+    using ComponentsIndexed = std::vector<std::unique_ptr<IContainer>>;
+    using Components = std::vector<IContainer*>;
     
     template<typename T>
     void AssureComponent() {
         const auto id = IdHelper::GetId<T>();
-        if (id>=components.size()) {
-            components.resize(id + 1);
+        if (id>=componentsIndexed.size()) {
+            componentsIndexed.resize(id + 1);
         }
-        if (components[id]) return;
-        components[id] = std::make_unique<Container<T>>();
+        if (componentsIndexed[id]) return;
+        componentsIndexed[id] = std::make_unique<Container<T>>();
+        components.push_back(componentsIndexed[id].get());
     }
     
     template<typename T>
     Container<T>& ComponentContainer() const {
         const auto id = IdHelper::GetId<T>();
-        return static_cast<Container<T>&>(*components[id]);
+        return static_cast<Container<T>&>(*componentsIndexed[id]);
     }
     
     template<typename T, typename... Args>
@@ -45,7 +47,7 @@ struct Database {
     template<typename T>
     T* GetComponent(const GameObjectId objectId) const {
         const auto componentId = IdHelper::GetId<T>();
-        if (componentId>=components.size()) return nullptr;
+        if (componentId>=componentsIndexed.size()) return nullptr;
         auto& container = ComponentContainer<T>();
         return container.Contains(objectId) ? container.Get(objectId) : nullptr;
     }
@@ -69,6 +71,7 @@ struct Database {
     void Remove(const GameObjectId objectId);
     
 private:
+    ComponentsIndexed componentsIndexed;
     Components components;
     
     std::vector<GameObjectId> objects;

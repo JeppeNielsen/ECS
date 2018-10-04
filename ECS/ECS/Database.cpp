@@ -10,8 +10,8 @@
 
 using namespace ECS;
 void Database::RemoveComponent(const GameObjectId objectId, const std::size_t componentId) {
-    if (componentId<components.size() && components[componentId]) {
-        components[componentId]->Destroy(objectId);
+    if (componentId<componentsIndexed.size() && componentsIndexed[componentId]) {
+        componentsIndexed[componentId]->Destroy(objectId);
     }
 }
 

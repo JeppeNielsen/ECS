@@ -56,6 +56,10 @@ Database& Scene::GetDatabase() const {
     return database;
 }
 
+bool Scene::IsEmpty() const {
+    return objects.objects.empty();
+}
+
 void Scene::RemoveObject(const GameObjectId object) {
     removeActions.insert(object);
 }
