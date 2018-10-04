@@ -76,6 +76,33 @@ void TestECS::Run() {
         return !gameObject.GetComponent<Component>();
     });
     
+    RunTest("AddReferenceComponent", [] () -> bool {
+        struct Component { int data; };
+        Database database;
+        Scene scene(database);
+        GameObject source = scene.CreateObject();
+        auto sourceComponent = source.AddComponent<Component>(123);
+        GameObject dest = scene.CreateObject();
+        auto destComponent = dest.AddReferenceComponent<Component>(source);
+        scene.Update(0.0f);
+        return sourceComponent == destComponent;
+    });
+    
+    RunTest("AddReferenceComponent, source removed", [] () -> bool {
+        struct Component { int data; };
+        Database database;
+        Scene scene(database);
+        GameObject source = scene.CreateObject();
+        source.AddComponent<Component>(123);
+        GameObject dest = scene.CreateObject();
+        dest.AddReferenceComponent<Component>(source);
+        source.Remove();
+        scene.Update(0.0f);
+        source = scene.CreateObject();
+        auto sourceComponent = source.AddComponent<Component>(123);
+        return dest.GetComponent<Component>()!=nullptr && dest.GetComponent<Component>()!=sourceComponent && sourceComponent;
+    });
+    
     RunTest("AddSystem", [] () -> bool {
         struct Position {};
         struct PositionSystem : public ECS::System<Position> { void Update(float dt) {}};
