@@ -17,6 +17,9 @@
 		72A86DA521139742001BCF6B /* JsonSerializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86DA321139742001BCF6B /* JsonSerializer.cpp */; };
 		72A86DAA2116F0DD001BCF6B /* testPartialSpecializations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86DA92116F0DD001BCF6B /* testPartialSpecializations.cpp */; };
 		72A86DAD2122116D001BCF6B /* JsonDeserializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86DAC2122116C001BCF6B /* JsonDeserializer.cpp */; };
+		72A86DB121567291001BCF6B /* Test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86DAF21567291001BCF6B /* Test.cpp */; };
+		72A86DB32156753A001BCF6B /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86DB22156753A001BCF6B /* test.cpp */; };
+		72A86DB6215675C1001BCF6B /* TestECS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86DB4215675C1001BCF6B /* TestECS.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -61,6 +64,11 @@
 		72A86DA92116F0DD001BCF6B /* testPartialSpecializations.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testPartialSpecializations.cpp; sourceTree = "<group>"; };
 		72A86DAB2122116C001BCF6B /* JsonDeserializer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = JsonDeserializer.hpp; path = ECS/Serialization/JsonDeserializer.hpp; sourceTree = SOURCE_ROOT; };
 		72A86DAC2122116C001BCF6B /* JsonDeserializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JsonDeserializer.cpp; path = ECS/Serialization/JsonDeserializer.cpp; sourceTree = SOURCE_ROOT; };
+		72A86DAF21567291001BCF6B /* Test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Test.cpp; sourceTree = "<group>"; };
+		72A86DB021567291001BCF6B /* Test.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Test.hpp; sourceTree = "<group>"; };
+		72A86DB22156753A001BCF6B /* test.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test.cpp; sourceTree = "<group>"; };
+		72A86DB4215675C1001BCF6B /* TestECS.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestECS.cpp; sourceTree = "<group>"; };
+		72A86DB5215675C1001BCF6B /* TestECS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TestECS.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +101,7 @@
 		726CB1E120FD2ADF009E1412 /* ECS */ = {
 			isa = PBXGroup;
 			children = (
+				72A86DAE21567253001BCF6B /* Tests */,
 				72A86DA62113A8CD001BCF6B /* Json */,
 				72A86DA221139651001BCF6B /* Serialization */,
 				72A86D9E210E5E23001BCF6B /* Data */,
@@ -101,6 +110,7 @@
 				726CB21F210509E4009E1412 /* ecs.cpp */,
 				72A86D97210A6982001BCF6B /* serialization.cpp */,
 				72A86DA92116F0DD001BCF6B /* testPartialSpecializations.cpp */,
+				72A86DB22156753A001BCF6B /* test.cpp */,
 			);
 			path = ECS;
 			sourceTree = "<group>";
@@ -166,6 +176,17 @@
 			path = Json;
 			sourceTree = "<group>";
 		};
+		72A86DAE21567253001BCF6B /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				72A86DAF21567291001BCF6B /* Test.cpp */,
+				72A86DB021567291001BCF6B /* Test.hpp */,
+				72A86DB4215675C1001BCF6B /* TestECS.cpp */,
+				72A86DB5215675C1001BCF6B /* TestECS.hpp */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -226,10 +247,13 @@
 				72A86D8C21091706001BCF6B /* Scene.cpp in Sources */,
 				72A86DAA2116F0DD001BCF6B /* testPartialSpecializations.cpp in Sources */,
 				72A86DAD2122116D001BCF6B /* JsonDeserializer.cpp in Sources */,
+				72A86DB32156753A001BCF6B /* test.cpp in Sources */,
 				72A86D92210918A2001BCF6B /* GameObject.cpp in Sources */,
+				72A86DB6215675C1001BCF6B /* TestECS.cpp in Sources */,
 				72A86D8621091268001BCF6B /* ObjectList.cpp in Sources */,
 				72A86D8921091451001BCF6B /* Database.cpp in Sources */,
 				72A86D98210A6982001BCF6B /* serialization.cpp in Sources */,
+				72A86DB121567291001BCF6B /* Test.cpp in Sources */,
 				726CB221210509E4009E1412 /* ecs.cpp in Sources */,
 				72A86D9D210E5D8E001BCF6B /* Hierarchy.cpp in Sources */,
 				72A86DA521139742001BCF6B /* JsonSerializer.cpp in Sources */,

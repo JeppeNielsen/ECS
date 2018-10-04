@@ -6,6 +6,13 @@
 //  Copyright © 2018 Jeppe Nielsen. All rights reserved.
 //
 
-#include "Test.hpp"
+#include "TestECS.hpp"
 
+using namespace ECS::Tests;
 
+int main() {
+    TestECS testEcs;
+    testEcs.Run();
+
+    return 0;
+}

@@ -6,9 +6,13 @@
 //  Copyright © 2018 Jeppe Nielsen. All rights reserved.
 //
 
-#ifndef TestECS_hpp
-#define TestECS_hpp
+#include "Test.hpp"
 
-#include <stdio.h>
-
-#endif /* TestECS_hpp */
+namespace ECS {
+namespace Tests {
+    class TestECS : public Test {
+    public:
+        void Run();
+    };
+}
+}

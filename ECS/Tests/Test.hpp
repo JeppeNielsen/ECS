@@ -6,9 +6,17 @@
 //  Copyright © 2018 Jeppe Nielsen. All rights reserved.
 //
 
-#ifndef Test_hpp
-#define Test_hpp
+#pragma once
+#include <functional>
+#include <string>
 
-#include <stdio.h>
-
-#endif /* Test_hpp */
+namespace ECS {
+namespace Tests {
+    class Test {
+    protected:
+        void RunTest(const std::string& testName, const std::function<bool()> testCode) const;
+    public:
+        virtual void Run() = 0;
+    };
+}
+}
