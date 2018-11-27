@@ -10,16 +10,22 @@
 #include "GameObjectId.hpp"
 #include "Container.hpp"
 #include "IdHelper.hpp"
+#include "ClassNameHelper.hpp"
 
 namespace ECS {
 
-struct Scene;
+class Scene;
+class GameObject;
 
-struct Database {
+class Database {
+public:
     using IdHelper = IdHelper<struct ComponentId>;
+private:
     using ComponentsIndexed = std::vector<std::unique_ptr<IContainer>>;
     using Components = std::vector<IContainer*>;
+    using ComponentNames = std::vector<std::string>;
     
+public:
     template<typename T>
     void AssureComponent() {
         const auto id = IdHelper::GetId<T>();
@@ -29,6 +35,7 @@ struct Database {
         if (componentsIndexed[id]) return;
         componentsIndexed[id] = std::make_unique<Container<T>>();
         components.push_back(componentsIndexed[id].get());
+        componentNames.push_back(ClassNameHelper::GetName<T>());
     }
     
     template<typename T>
@@ -37,6 +44,10 @@ struct Database {
         return static_cast<Container<T>&>(*componentsIndexed[id]);
     }
     
+    IContainer* FindComponentContainer(const std::string& componentName);
+    
+private:
+
     template<typename T, typename... Args>
     T* AddComponent(const GameObjectId objectId, Args&& ... args) {
         AssureComponent<T>();
@@ -77,9 +88,12 @@ struct Database {
     
     void Remove(const GameObjectId objectId);
     
-private:
+    friend class Scene;
+    friend class GameObject;
+    
     ComponentsIndexed componentsIndexed;
     Components components;
+    ComponentNames componentNames;
     
     std::vector<GameObjectId> objects;
     std::size_t available {};

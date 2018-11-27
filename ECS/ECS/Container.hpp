@@ -25,7 +25,9 @@ struct IContainer {
         return index<indicies.size() && indicies[index] != GameObjectIdNull;
     }
     
-    virtual void Destroy(const GameObjectId object) = 0;
+    virtual void CreateDefault(const GameObjectId id) = 0;
+    
+    virtual void Destroy(const GameObjectId id) = 0;
     
     virtual void VisitFields(const GameObjectId id, FieldVisitor& fieldVisitor) = 0;
     
@@ -52,6 +54,11 @@ struct Container : public IContainer {
         }
         indicies[index] = (std::uint32_t)elements.size();
         references.emplace_back(1);
+    }
+    
+    void CreateDefault(const GameObjectId id) override {
+        CreateIndex(id);
+        elements.emplace_back(T{});
     }
     
     template<typename... Args>

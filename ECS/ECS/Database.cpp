@@ -55,3 +55,13 @@ void Database::Remove(const GameObjectId objectId) {
     next = object;
     ++available;
 }
+
+IContainer* Database::FindComponentContainer(const std::string& componentName) {
+    for (auto i = 0; i<componentNames.size(); ++i) {
+        if (componentNames[i] == componentName) {
+            return components[i];
+        }
+    }
+    return nullptr;
+}
+

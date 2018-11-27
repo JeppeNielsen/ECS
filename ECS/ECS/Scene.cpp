@@ -35,6 +35,7 @@ void Scene::Update(float dt) {
             }
         }
     });
+    
     DoActions(removeComponentActions, [this] (const auto& pair) {
         database.RemoveComponent(pair.first, pair.second);
         for(const auto& system : systems) {

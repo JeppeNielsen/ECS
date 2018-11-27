@@ -16,6 +16,7 @@ using namespace ECS;
 JsonDeserializer::JsonDeserializer() {
     
     fieldVisitor.OnFieldMultiple<int, float, std::string>([this](const std::string& name, auto& field) {
+        std::cout << name << " = " << field << std::endl;
     });
     
     fieldVisitor.OnBegin([this] (const std::string& type) {
@@ -25,9 +26,11 @@ JsonDeserializer::JsonDeserializer() {
     });
     
     fieldVisitor.OnVectorBegin([this](const std::string& type) {
+        std::cout << "OnVectorBegin "<< type << std::endl;
     });
     
     fieldVisitor.OnVectorEnd([this] (const std::string& type) {
+        std::cout << "OnVectorEnd " << type << std::endl;
     });
 }
 
@@ -56,11 +59,11 @@ void JsonDeserializer::Deserialize(GameObject object, minijson::istream_context 
         } else if (name == "Components" && v.type() == minijson::Object) {
             minijson::parse_object(context, [&] (const char* name, minijson::value v) {
                 if (v.type() == minijson::Object) {
-                    minijson::ignore(context);
+                    
                     //minijson::parse_object(context, [&] (const char* n, minijson::value v) {
                        // AddComponent(object, addReferenceComponents, context, n);
                     //});
-                    std::cout << "name = " << name << std::endl;
+                    DeserializeComponent(object, context, name);
                 } else {
                     minijson::ignore(context);
                 }
@@ -86,5 +89,17 @@ void JsonDeserializer::Deserialize(GameObject object, minijson::istream_context 
     });
 }
 
+void JsonDeserializer::DeserializeComponent(ECS::GameObject object, minijson::istream_context &context, const std::string &componentName) {
+
+    std::cout << "Deserialize component with name = " << componentName << std::endl;
+
+    auto& database = object.Scene().GetDatabase();
+
+    auto container = database.FindComponentContainer(componentName);
+    container->CreateDefault(object.Id());
+    container->VisitFields(object.Id(), fieldVisitor);
+    
+    minijson::ignore(context);
+}
 
 
