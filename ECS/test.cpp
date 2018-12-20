@@ -10,7 +10,7 @@
 
 using namespace ECS::Tests;
 
-int main() {
+int main_tests() {
     TestECS testEcs;
     testEcs.Run();
 

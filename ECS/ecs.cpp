@@ -13,7 +13,7 @@
 
 using namespace ECS;
 
-struct Position {
+struct Position2d {
     float x;
     float y;
 };
@@ -23,7 +23,7 @@ struct Velocity {
     float vy;
 };
 
-struct VelocitySystem : public System<Position, Velocity> {
+struct VelocitySystem : public System<Position2d, Velocity> {
     void ObjectAdded(GameObject object) override {
         std::cout << "Object added " << std::endl;
     }
@@ -34,7 +34,7 @@ struct VelocitySystem : public System<Position, Velocity> {
     
     void Update(float dt) override {
         for(auto object : Objects()) {
-            auto pos = object.GetComponent<Position>();
+            auto pos = object.GetComponent<Position2d>();
             auto vel = object.GetComponent<Velocity>();
             pos->x += vel->vx;
             std::cout << pos->x << std::endl;
@@ -52,10 +52,10 @@ int main_ecs() {
     //scene.AddComponent<Position>(object1);
     //scene.AddComponent<Velocity>(object1)->vx = 2;
     
-    object1.AddComponent<Position>(2.0f);
+    object1.AddComponent<Position2d>(100.0f, 32.0f);
     object1.AddComponent<Velocity>()->vx = 100;
     
-    object1.RemoveComponent<Position>();
+    object1.RemoveComponent<Position2d>();
     
     
     
@@ -63,17 +63,17 @@ int main_ecs() {
         std::cout << "is valid" << std::endl;
     }
     
-    /*object1.Remove();
+   // object1.Remove();
+    //object1.Remove();
     object1.Remove();
-    object1.Remove();
-    */
+    
     if (object1) {
         std::cout << "still valid" << std::endl;
     }
     
     scene.Update(1.0f);
     
-    object1.AddComponent<Position>(100.0f);
+   // object1.AddComponent<Position2d>(100.0f,100.0f);
     
     if (!object1) {
         std::cout << "not valid" << std::endl;

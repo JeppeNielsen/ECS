@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7216B0C721B075BE00EB4748 /* TypeInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B0C521B075BE00EB4748 /* TypeInfo.cpp */; };
+		7216B0CA21B076DC00EB4748 /* FieldInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B0C821B076DC00EB4748 /* FieldInfo.cpp */; };
+		7216B0CD21B07B4E00EB4748 /* TestReflection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B0CB21B07B4E00EB4748 /* TestReflection.cpp */; };
 		726CB221210509E4009E1412 /* ecs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 726CB21F210509E4009E1412 /* ecs.cpp */; };
 		72A86D8621091268001BCF6B /* ObjectList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D8421091268001BCF6B /* ObjectList.cpp */; };
 		72A86D8921091451001BCF6B /* Database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D8721091451001BCF6B /* Database.cpp */; };
@@ -35,6 +38,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7216B0C521B075BE00EB4748 /* TypeInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TypeInfo.cpp; sourceTree = "<group>"; };
+		7216B0C621B075BE00EB4748 /* TypeInfo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TypeInfo.hpp; sourceTree = "<group>"; };
+		7216B0C821B076DC00EB4748 /* FieldInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FieldInfo.cpp; sourceTree = "<group>"; };
+		7216B0C921B076DC00EB4748 /* FieldInfo.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FieldInfo.hpp; sourceTree = "<group>"; };
+		7216B0CB21B07B4E00EB4748 /* TestReflection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestReflection.cpp; sourceTree = "<group>"; };
 		726CB1DF20FD2ADF009E1412 /* ECS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ECS; sourceTree = BUILT_PRODUCTS_DIR; };
 		726CB21F210509E4009E1412 /* ecs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ecs.cpp; sourceTree = "<group>"; };
 		72A86D8021090E98001BCF6B /* MetaHelper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MetaHelper.hpp; sourceTree = "<group>"; };
@@ -82,6 +90,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7216B0C421B074F500EB4748 /* Reflection */ = {
+			isa = PBXGroup;
+			children = (
+				7216B0C521B075BE00EB4748 /* TypeInfo.cpp */,
+				7216B0C621B075BE00EB4748 /* TypeInfo.hpp */,
+				7216B0C821B076DC00EB4748 /* FieldInfo.cpp */,
+				7216B0C921B076DC00EB4748 /* FieldInfo.hpp */,
+			);
+			path = Reflection;
+			sourceTree = "<group>";
+		};
 		726CB1D620FD2ADF009E1412 = {
 			isa = PBXGroup;
 			children = (
@@ -101,16 +120,18 @@
 		726CB1E120FD2ADF009E1412 /* ECS */ = {
 			isa = PBXGroup;
 			children = (
-				72A86DAE21567253001BCF6B /* Tests */,
-				72A86DA62113A8CD001BCF6B /* Json */,
-				72A86DA221139651001BCF6B /* Serialization */,
 				72A86D9E210E5E23001BCF6B /* Data */,
-				72A86D99210B4867001BCF6B /* Helpers */,
 				72A86D7F21090D6B001BCF6B /* ECS */,
 				726CB21F210509E4009E1412 /* ecs.cpp */,
+				72A86D99210B4867001BCF6B /* Helpers */,
+				72A86DA62113A8CD001BCF6B /* Json */,
+				7216B0C421B074F500EB4748 /* Reflection */,
+				72A86DA221139651001BCF6B /* Serialization */,
 				72A86D97210A6982001BCF6B /* serialization.cpp */,
-				72A86DA92116F0DD001BCF6B /* testPartialSpecializations.cpp */,
 				72A86DB22156753A001BCF6B /* test.cpp */,
+				72A86DA92116F0DD001BCF6B /* testPartialSpecializations.cpp */,
+				72A86DAE21567253001BCF6B /* Tests */,
+				7216B0CB21B07B4E00EB4748 /* TestReflection.cpp */,
 			);
 			path = ECS;
 			sourceTree = "<group>";
@@ -251,11 +272,14 @@
 				72A86D92210918A2001BCF6B /* GameObject.cpp in Sources */,
 				72A86DB6215675C1001BCF6B /* TestECS.cpp in Sources */,
 				72A86D8621091268001BCF6B /* ObjectList.cpp in Sources */,
+				7216B0CA21B076DC00EB4748 /* FieldInfo.cpp in Sources */,
 				72A86D8921091451001BCF6B /* Database.cpp in Sources */,
 				72A86D98210A6982001BCF6B /* serialization.cpp in Sources */,
+				7216B0C721B075BE00EB4748 /* TypeInfo.cpp in Sources */,
 				72A86DB121567291001BCF6B /* Test.cpp in Sources */,
 				726CB221210509E4009E1412 /* ecs.cpp in Sources */,
 				72A86D9D210E5D8E001BCF6B /* Hierarchy.cpp in Sources */,
+				7216B0CD21B07B4E00EB4748 /* TestReflection.cpp in Sources */,
 				72A86DA521139742001BCF6B /* JsonSerializer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

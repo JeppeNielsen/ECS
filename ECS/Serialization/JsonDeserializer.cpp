@@ -15,8 +15,17 @@ using namespace ECS;
 
 JsonDeserializer::JsonDeserializer() {
     
-    fieldVisitor.OnFieldMultiple<int, float, std::string>([this](const std::string& name, auto& field) {
-        std::cout << name << " = " << field << std::endl;
+    fieldVisitor.OnField<std::string>([this](const std::string& name, auto& field) {
+       //minijson::ignore(*currentContext);
+       /*minijson::parse_object(*currentContext, [&] (const char* n, minijson::value v) {
+            field = std::string(v.as_string());
+        });
+        */
+    });
+    
+    fieldVisitor.OnFieldMultiple<int, float>([this](const std::string& name, auto& field) {
+        //std::cout << name << " = " << field << std::endl;
+         //minijson::ignore(*currentContext);
     });
     
     fieldVisitor.OnBegin([this] (const std::string& type) {
@@ -37,6 +46,7 @@ JsonDeserializer::JsonDeserializer() {
 void JsonDeserializer::DeserializeObject(GameObject object, std::istream& stream) {
     
     minijson::istream_context context(stream);
+    currentContext = &context;
     try {
         minijson::parse_object(context, [&] (const char* n, minijson::value v) {
             std::string token = n;
@@ -97,9 +107,34 @@ void JsonDeserializer::DeserializeComponent(ECS::GameObject object, minijson::is
 
     auto container = database.FindComponentContainer(componentName);
     container->CreateDefault(object.Id());
+    
+    FillObject(container, object.Id(), context, componentName);
+    
     container->VisitFields(object.Id(), fieldVisitor);
     
-    minijson::ignore(context);
+    //minijson::ignore(context);
+    
 }
 
+void JsonDeserializer::FillObject(ECS::IContainer *container, ECS::GameObjectId objectId, minijson::istream_context &context, const std::string& objectName) {
+
+    std::cout << "Start read object with name: " << objectName << std::endl;
+
+    minijson::parse_object(context, [&] (const char* name, minijson::value v) {
+        
+        if (v.type() == minijson::Object) {
+            FillObject(container, objectId, context, name);
+        } else if (v.type() == minijson::Array){
+            minijson::parse_array(context, [&, this] (minijson::value v) {
+                if (v.type() == minijson::Object) {
+                    FillObject(container, objectId, context, "arrayElement");
+                }
+            });
+        
+            std::cout << name << "    array " << std::endl;
+        } else {
+            std::cout << name << "   " << v.as_string() << std::endl;
+        }
+    });    
+}
 
