@@ -40,6 +40,10 @@ namespace ECS {
             });
         }
         
+        const std::string& Name() {
+            return name;
+        }
+        
     private:
     
         bool TryFindInfo(const std::string& name, FieldInfo& info) {

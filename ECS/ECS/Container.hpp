@@ -13,7 +13,7 @@
 #include <deque>
 #include <assert.h>
 #include "MetaHelper.hpp"
-#include "FieldVisitor.hpp"
+#include "TypeInfo.hpp"
 
 namespace ECS {
 
@@ -29,7 +29,8 @@ struct IContainer {
     
     virtual void Destroy(const GameObjectId id) = 0;
     
-    virtual void VisitFields(const GameObjectId id, FieldVisitor& fieldVisitor) = 0;
+    virtual void Serialize(const GameObjectId id, minijson::object_writer& writer) = 0;
+    virtual void Deserialize(const GameObjectId id, minijson::istream_context& context) = 0;
     
     std::vector<std::uint32_t> indicies;
 };
@@ -109,17 +110,34 @@ struct Container : public IContainer {
         return &elements[indicies[index]];
     }
     
-    template<typename Visitor, typename Type>
-    static void TryVisitFields(Visitor& visitor, Type& type) {
-        ECS::Meta::static_if<HasVisitFieldsMethod<Type>, Type&>(type, [&visitor](auto& type) {
-            type.VisitFields(visitor);
+    template<typename Type>
+    static void TrySerializeFields(minijson::object_writer& writer, Type& instance) {
+        ECS::Meta::static_if<HasGetTypeMethod<Type>, Type&>(instance, [&writer](auto& getType) {
+            auto typeInfo = getType.GetType();
+            auto name = writer.nested_object(typeInfo.Name().c_str());
+            typeInfo.Serialize(name);
+            name.close();
         });
     }
     
-    void VisitFields(const GameObjectId id, FieldVisitor& fieldVisitor) override {
-        T* instance = Get(id);
-        TryVisitFields(fieldVisitor, *instance);
+    template<typename Type>
+    static void TryDeserializeFields(minijson::istream_context& context, Type& instance) {
+        ECS::Meta::static_if<HasGetTypeMethod<Type>, Type&>(instance, [&context](auto& getType) {
+            auto typeInfo = getType.GetType();
+            typeInfo.Deserialize(context);
+        });
     }
+    
+    virtual void Serialize(const GameObjectId id, minijson::object_writer& writer) override {
+        T* instance = Get(id);
+        TrySerializeFields(writer, *instance);
+    }
+    
+    virtual void Deserialize(const GameObjectId id, minijson::istream_context& context) override {
+        T* instance = Get(id);
+        TryDeserializeFields(context, *instance);
+    }
+    
     
     std::deque<T> elements;
     std::vector<std::uint16_t> references;

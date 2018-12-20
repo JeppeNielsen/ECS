@@ -7,7 +7,6 @@
 //
 
 #pragma once
-#include "FieldVisitor.hpp"
 #include "Scene.hpp"
 #include <istream>
 #include "minijson_reader.hpp"
@@ -21,10 +20,5 @@ namespace ECS {
     
         void Deserialize(GameObject object, minijson::istream_context &context, const std::function<void(GameObject)>& objectCreated);
         void DeserializeComponent(GameObject object, minijson::istream_context &context, const std::string& componentName);
-        
-        FieldVisitor fieldVisitor;
-        minijson::istream_context* currentContext;
-        
-        void FillObject(IContainer* container, ECS::GameObjectId objectId, minijson::istream_context &context, const std::string& objectName);
     };
 }

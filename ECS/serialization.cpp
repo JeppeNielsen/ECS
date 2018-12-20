@@ -57,13 +57,17 @@ struct Velocity {
     
 };
 
-int main_serialization() {
+int main() {
 
     Database database;
     Scene scene(database);
     auto parent = scene.CreateObject();
     Node node {"First node",  3.0f };
-    parent.AddComponent<Position>("jeppe", node );
+    parent.AddComponent<Position>("jeppe", node, std::vector<Node> {
+        { "First node", 10.0f},
+        { "Second node", 20.0f},
+        { "Third node", 30.0f},
+    });
     parent.AddComponent<Velocity>(2.0f,4.0f);
     parent.AddComponent<NodeList>(std::vector<Node> {
         { "First node", 10.0f},
@@ -73,7 +77,7 @@ int main_serialization() {
     
     auto child = scene.CreateObject();
     child.AddComponent<Position>("Jeppe", node);
-    child.Hierarchy().Parent = parent;
+    //child.Hierarchy().Parent = parent;
     
     
     Node node2 {"Second node",  3000.0f };
@@ -97,6 +101,8 @@ int main_serialization() {
         JsonSerializer outSerializer;
         outSerializer.SerializeObject(deserializedObject, std::cout);
     }
+    
+    auto position = deserializedObject.GetComponent<Position>();
     
     return 0;
 }

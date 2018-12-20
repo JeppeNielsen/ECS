@@ -49,7 +49,7 @@ struct Location {
 };
 
 
-int main() {
+int main_reflection() {
     
     Location position {123, 456};
     position.points.push_back({3,5});
