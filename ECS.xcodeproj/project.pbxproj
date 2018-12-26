@@ -11,6 +11,11 @@
 		7216B0CA21B076DC00EB4748 /* FieldInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B0C821B076DC00EB4748 /* FieldInfo.cpp */; };
 		7216B0CD21B07B4E00EB4748 /* TestReflection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B0CB21B07B4E00EB4748 /* TestReflection.cpp */; };
 		7216B0D021CC45F800EB4748 /* FieldSerializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B0CE21CC45F800EB4748 /* FieldSerializer.cpp */; };
+		7216B0D621CEF19300EB4748 /* CommandRunner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B0D421CEF19300EB4748 /* CommandRunner.cpp */; };
+		7216B0D921CEF2A000EB4748 /* ScriptCompiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B0D721CEF2A000EB4748 /* ScriptCompiler.cpp */; };
+		7216B0DB21CEF45D00EB4748 /* testScripting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B0DA21CEF45D00EB4748 /* testScripting.cpp */; };
+		7216B0E321CF06B700EB4748 /* libclang.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7216B0E221CF06B700EB4748 /* libclang.dylib */; };
+		7216B0EC21D0278100EB4748 /* ScriptData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B0EB21D0278100EB4748 /* ScriptData.cpp */; };
 		726CB221210509E4009E1412 /* ecs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 726CB21F210509E4009E1412 /* ecs.cpp */; };
 		72A86D8621091268001BCF6B /* ObjectList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D8421091268001BCF6B /* ObjectList.cpp */; };
 		72A86D8921091451001BCF6B /* Database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D8721091451001BCF6B /* Database.cpp */; };
@@ -45,6 +50,16 @@
 		7216B0CB21B07B4E00EB4748 /* TestReflection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TestReflection.cpp; sourceTree = "<group>"; };
 		7216B0CE21CC45F800EB4748 /* FieldSerializer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FieldSerializer.cpp; path = ECS/Serialization/FieldSerializer.cpp; sourceTree = SOURCE_ROOT; };
 		7216B0CF21CC45F800EB4748 /* FieldSerializer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FieldSerializer.hpp; path = ECS/Serialization/FieldSerializer.hpp; sourceTree = SOURCE_ROOT; };
+		7216B0D221CEEEFD00EB4748 /* game.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = game.cpp; sourceTree = "<group>"; };
+		7216B0D421CEF19300EB4748 /* CommandRunner.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CommandRunner.cpp; sourceTree = "<group>"; };
+		7216B0D521CEF19300EB4748 /* CommandRunner.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CommandRunner.hpp; sourceTree = "<group>"; };
+		7216B0D721CEF2A000EB4748 /* ScriptCompiler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptCompiler.cpp; sourceTree = "<group>"; };
+		7216B0D821CEF2A000EB4748 /* ScriptCompiler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScriptCompiler.hpp; sourceTree = "<group>"; };
+		7216B0DA21CEF45D00EB4748 /* testScripting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testScripting.cpp; sourceTree = "<group>"; };
+		7216B0E221CF06B700EB4748 /* libclang.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libclang.dylib; path = clang/lib/libclang.dylib; sourceTree = "<group>"; };
+		7216B0EA21D0278100EB4748 /* ScriptData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ScriptData.hpp; sourceTree = "<group>"; };
+		7216B0EB21D0278100EB4748 /* ScriptData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptData.cpp; sourceTree = "<group>"; };
+		7216B0ED21D0373800EB4748 /* ScriptInclude.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScriptInclude.hpp; sourceTree = "<group>"; };
 		726CB1DF20FD2ADF009E1412 /* ECS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ECS; sourceTree = BUILT_PRODUCTS_DIR; };
 		726CB21F210509E4009E1412 /* ecs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ecs.cpp; sourceTree = "<group>"; };
 		72A86D8021090E98001BCF6B /* MetaHelper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MetaHelper.hpp; sourceTree = "<group>"; };
@@ -84,6 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7216B0E321CF06B700EB4748 /* libclang.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,9 +117,30 @@
 			path = Reflection;
 			sourceTree = "<group>";
 		};
+		7216B0D121CEEED900EB4748 /* TestClang */ = {
+			isa = PBXGroup;
+			children = (
+				7216B0D221CEEEFD00EB4748 /* game.cpp */,
+				7216B0ED21D0373800EB4748 /* ScriptInclude.hpp */,
+			);
+			path = TestClang;
+			sourceTree = "<group>";
+		};
+		7216B0D321CEF17600EB4748 /* Scripting */ = {
+			isa = PBXGroup;
+			children = (
+				7216B0EB21D0278100EB4748 /* ScriptData.cpp */,
+				7216B0EA21D0278100EB4748 /* ScriptData.hpp */,
+				7216B0D721CEF2A000EB4748 /* ScriptCompiler.cpp */,
+				7216B0D821CEF2A000EB4748 /* ScriptCompiler.hpp */,
+			);
+			path = Scripting;
+			sourceTree = "<group>";
+		};
 		726CB1D620FD2ADF009E1412 = {
 			isa = PBXGroup;
 			children = (
+				7216B0E221CF06B700EB4748 /* libclang.dylib */,
 				726CB1E120FD2ADF009E1412 /* ECS */,
 				726CB1E020FD2ADF009E1412 /* Products */,
 			);
@@ -120,6 +157,8 @@
 		726CB1E120FD2ADF009E1412 /* ECS */ = {
 			isa = PBXGroup;
 			children = (
+				7216B0D321CEF17600EB4748 /* Scripting */,
+				7216B0D121CEEED900EB4748 /* TestClang */,
 				72A86D9E210E5E23001BCF6B /* Data */,
 				72A86D7F21090D6B001BCF6B /* ECS */,
 				726CB21F210509E4009E1412 /* ecs.cpp */,
@@ -131,6 +170,7 @@
 				72A86DB22156753A001BCF6B /* test.cpp */,
 				72A86DAE21567253001BCF6B /* Tests */,
 				7216B0CB21B07B4E00EB4748 /* TestReflection.cpp */,
+				7216B0DA21CEF45D00EB4748 /* testScripting.cpp */,
 			);
 			path = ECS;
 			sourceTree = "<group>";
@@ -161,6 +201,8 @@
 			isa = PBXGroup;
 			children = (
 				72A86D9A210B487F001BCF6B /* ClassNameHelper.hpp */,
+				7216B0D421CEF19300EB4748 /* CommandRunner.cpp */,
+				7216B0D521CEF19300EB4748 /* CommandRunner.hpp */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -266,6 +308,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				72A86D8C21091706001BCF6B /* Scene.cpp in Sources */,
+				7216B0D921CEF2A000EB4748 /* ScriptCompiler.cpp in Sources */,
 				72A86DAD2122116D001BCF6B /* JsonDeserializer.cpp in Sources */,
 				7216B0D021CC45F800EB4748 /* FieldSerializer.cpp in Sources */,
 				72A86DB32156753A001BCF6B /* test.cpp in Sources */,
@@ -273,9 +316,12 @@
 				72A86DB6215675C1001BCF6B /* TestECS.cpp in Sources */,
 				72A86D8621091268001BCF6B /* ObjectList.cpp in Sources */,
 				7216B0CA21B076DC00EB4748 /* FieldInfo.cpp in Sources */,
+				7216B0DB21CEF45D00EB4748 /* testScripting.cpp in Sources */,
 				72A86D8921091451001BCF6B /* Database.cpp in Sources */,
 				72A86D98210A6982001BCF6B /* serialization.cpp in Sources */,
+				7216B0EC21D0278100EB4748 /* ScriptData.cpp in Sources */,
 				7216B0C721B075BE00EB4748 /* TypeInfo.cpp in Sources */,
+				7216B0D621CEF19300EB4748 /* CommandRunner.cpp in Sources */,
 				72A86DB121567291001BCF6B /* Test.cpp in Sources */,
 				726CB221210509E4009E1412 /* ecs.cpp in Sources */,
 				72A86D9D210E5D8E001BCF6B /* Hierarchy.cpp in Sources */,
@@ -394,6 +440,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = /Projects/ECS/clang/include;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ECS/ScriptLib",
+					"$(PROJECT_DIR)/clang/lib/clang/7.0.0/lib/darwin",
+					"$(PROJECT_DIR)/clang/lib",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -402,6 +455,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = /Projects/ECS/clang/include;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ECS/ScriptLib",
+					"$(PROJECT_DIR)/clang/lib/clang/7.0.0/lib/darwin",
+					"$(PROJECT_DIR)/clang/lib",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
