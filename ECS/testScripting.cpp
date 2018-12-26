@@ -12,7 +12,7 @@
 
 using namespace ECS;
 
-int main()
+int main_scripting()
 {
 
     std::vector<std::string> includePaths;
