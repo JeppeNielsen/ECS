@@ -11,7 +11,7 @@
 
 using namespace ECS::Tests;
 
-void Test::RunTest(const std::string& testName, const std::function<bool ()> testCode) const {
+void Test::RunTest(const std::string& testName, const std::function<bool ()>& testCode) const {
     bool result = testCode();
     
     std::cout << testName << ": " << (result ? "SUCCES" : "FAILED") << std::endl;

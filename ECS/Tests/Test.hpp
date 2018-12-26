@@ -14,7 +14,7 @@ namespace ECS {
 namespace Tests {
     class Test {
     protected:
-        void RunTest(const std::string& testName, const std::function<bool()> testCode) const;
+        void RunTest(const std::string& testName, const std::function<bool()>& testCode) const;
     public:
         virtual void Run() = 0;
     };

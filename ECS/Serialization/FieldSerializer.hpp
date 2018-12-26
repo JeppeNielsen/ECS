@@ -23,7 +23,6 @@ namespace ECS {
         }
     };
   
-  
     template<>
     struct FieldSerializer<int> {
         static void Serialize(minijson::object_writer& writer, const std::string& name, const int& field) {

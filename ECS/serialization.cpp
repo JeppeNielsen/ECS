@@ -57,7 +57,7 @@ struct Velocity {
     
 };
 
-int main() {
+int main_serialization() {
 
     Database database;
     Scene scene(database);
