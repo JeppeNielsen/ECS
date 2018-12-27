@@ -10,7 +10,9 @@
 #include <iostream>
 #include <vector>
 
+#include "Database.hpp"
 #include "System.hpp"
+#include "Components.hpp"
 
 using namespace ECS;
 
@@ -28,5 +30,4 @@ struct Velocity : System<Position> {
     void Update(float dt) override {
         std::cout << "Update from Velocity system"<< std::endl;
     }
-
 };

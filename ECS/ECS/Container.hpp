@@ -28,6 +28,7 @@ struct IContainer {
     virtual void CreateDefault(const GameObjectId id) = 0;
     
     virtual void Destroy(const GameObjectId id) = 0;
+    virtual void* GetInstance(const GameObjectId id) = 0;
     
     virtual void Serialize(const GameObjectId id, minijson::object_writer& writer) = 0;
     virtual void Deserialize(const GameObjectId id, minijson::istream_context& context) = 0;
@@ -108,6 +109,10 @@ struct Container : public IContainer {
     T* Get(const GameObjectId id) {
         const auto index = id & GameObjectIdIndexMask;
         return &elements[indicies[index]];
+    }
+    
+    void* GetInstance(const GameObjectId id) override {
+        return Get(id);
     }
     
     template<typename Type>

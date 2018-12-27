@@ -9,7 +9,13 @@
 #include <cling/Interpreter/Interpreter.h>
 #include <cling/Interpreter/Value.h>
 #include <cling/Utils/Casting.h>
-#include "ScriptInclude.hpp"
+#include "Database.hpp"
+#include "System.hpp"
+#include "Scene.hpp"
+#include "Components.hpp"
+#include "JsonSerializer.hpp"
+
+using namespace ECS;
 
 template<typename T>
 T* GetFunction(cling::Interpreter& interpreter, const std::string& functionName) {
@@ -17,6 +23,63 @@ T* GetFunction(cling::Interpreter& interpreter, const std::string& functionName)
   T* func = cling::utils::VoidToFunctionPtr<T*>(functionAddr);
   return func;
 }
+
+using createComponentFunction = void*(int);
+using removeComponentFunction = void(void*, int);
+using getComponentTypeInfoFunction = TypeInfo(void*, int);
+
+struct ScriptComponent {
+    
+    void* data;
+    int componentId;
+    removeComponentFunction* removeFunction;
+    getComponentTypeInfoFunction* getTypeInfoFunction;
+    
+    ScriptComponent() : data(nullptr), removeFunction(nullptr), getTypeInfoFunction(nullptr) {}
+    
+    ~ScriptComponent() {
+        if (removeFunction) {
+            removeFunction(data, componentId);
+        }
+    }
+    
+    ECS::TypeInfo GetType() {
+        return getTypeInfoFunction(data, componentId);
+    }
+};
+
+struct ScriptContainer : Container<ScriptComponent> {
+
+    int componentId;
+    createComponentFunction* createFunction;
+    removeComponentFunction* removeFunction;
+    getComponentTypeInfoFunction* getTypeInfoFunction;
+
+    ScriptContainer(int componentId,
+    createComponentFunction* createFunction,
+    removeComponentFunction* removeFunction,
+    getComponentTypeInfoFunction* getTypeInfoFunction)
+    :
+    componentId(componentId),
+    createFunction(createFunction),
+    removeFunction(removeFunction),
+    getTypeInfoFunction(getTypeInfoFunction) {}
+    
+    void CreateDefault(const GameObjectId id) override {
+        Container<ScriptComponent>::CreateDefault(id);
+        ScriptComponent& component = elements.back();
+        component.data = createFunction(componentId);
+        component.componentId = componentId;
+        component.removeFunction = removeFunction;
+        component.getTypeInfoFunction = getTypeInfoFunction;
+    }
+    
+    void* GetInstance(const GameObjectId id) override {
+        ScriptComponent* component = Get(id);
+        return component->data;
+    }
+    
+};
 
 int main() {
 
@@ -36,6 +99,30 @@ int main() {
     interp.AddIncludePath("/Projects/ECS/ECS/Helpers/");
 
 
+    std::string code = "";
+    code += "#include \"ScriptInclude.hpp\" \n";
+   
+    code += "template<> Hierarchy* ECS::GameObject::GetComponent<class Hierarchy>() const { return (class Hierarchy*) GetComponent(0); } \n";
+    code += "template<> Transform* ECS::GameObject::GetComponent<Transform>() const { return (Transform*) GetComponent(1); } \n";
+    code += "template<> Position* ECS::GameObject::GetComponent<Position>() const { return (Position*) GetComponent(2); } \n";
+    
+    code += "template<> Hierarchy* ECS::GameObject::AddComponent<class Hierarchy>() const { return (class Hierarchy*) AddComponent(0); } \n";
+    code += "template<> Transform* ECS::GameObject::AddComponent<Transform>() const { return (Transform*) AddComponent(1); } \n";
+    code += "template<> Position* ECS::GameObject::AddComponent<Position>() const { return (Position*) AddComponent(2); } \n";
+   
+    code += "template<> void ECS::GameObject::RemoveComponent<class Hierarchy>() const { RemoveComponent(0); } \n";
+    code += "template<> void ECS::GameObject::RemoveComponent<Transform>() const { RemoveComponent(1); } \n";
+    code += "template<> void ECS::GameObject::RemoveComponent<Position>() const { RemoveComponent(2); } \n";
+   
+   
+    code += "extern \"C\" void AddComponent(GameObject go) { go.AddComponent<Position>()->x = 123; go.GetComponent<Position>()->y = 456; go.AddComponent<Transform>()->rotation = 777; } \n";
+    code += "TypeInfo GetTypeInfo(void* ptr, int id) { Position* comp = (Position*)ptr; return comp->GetType(); } \n";
+    code += "extern \"C\" void* CreateComponent(int id) { return new Position(); } \n";
+    code += "extern \"C\" void RemoveComponent(void* ptr, int id) { Position* component = (Position*)ptr; delete component; } \n";
+    code += "extern \"C\" void Test(GameObject go) { go.RemoveComponent<Position>(); std::cout << \"Will removed Component\"; } \n";
+    
+/*
+
     interp.declare("#include \"ScriptInclude.hpp\" \n extern \"C\" ISystem* CreateSystem() { return new Velocity(); } ");
 
     interp.declare("#include \"ScriptInclude.hpp\" \n extern \"C\" void DeleteSystem(ISystem* sys) { delete sys; } ");
@@ -45,26 +132,85 @@ int main() {
     interp.declare("#include \"ScriptInclude.hpp\" \n  TypeInfo GetTypeInfo(void* ptr) { Position* pos = (Position*)ptr; return pos->GetType(); } ");
     interp.declare("#include \"ScriptInclude.hpp\" \n extern \"C\" void* CreateComponent() { Position* pos = new Position(); pos->x = 123; pos->y = 456; return pos; } ");
 
-    auto createSystem = GetFunction<ISystem*()>(interp, "CreateSystem");
-    auto deleteSystem = GetFunction<void(ISystem*)>(interp, "DeleteSystem");
-    auto callUpdate = GetFunction<void(ISystem*)>(interp, "CallUpdate");
-    auto getTypeInfo = GetFunction<TypeInfo(void*)>(interp, "_Z11GetTypeInfoPv");
-    auto createComponent = GetFunction<void*()>(interp, "CreateComponent");
+interp.declare("#include \"ScriptInclude.hpp\" \n extern \"C\" void InitializeDatabase(Database& database) { database.AssureComponent<Velocity>(); } ");
 
+interp.declare("#include \"ScriptInclude.hpp\" \n extern \"C\" void AddComponent(GameObject go) { go.AddComponent<Velocity>(); } ");
+interp.declare("#include \"ScriptInclude.hpp\" \n  TypeInfo GetComponentType(void* ptr) { GameObject* go = (GameObject*)ptr; return go->GetComponent<Position>()->GetType(); } ");
+    */
+    
+    interp.declare(code);
+    
+    
+
+    /*auto createSystem = GetFunction<ISystem*()>(interp, "CreateSystem");
+    auto deleteSystem = GetFunction<void(ISystem*)>(interp, "DeleteSystem");
+    auto createComponent = GetFunction<void*()>(interp, "CreateComponent");
+    auto initializeDatabase = GetFunction<void(Database&)>(interp, "InitializeDatabase");
+    
+    auto getComponentType = GetFunction<TypeInfo(void*)>(interp, "_Z16GetComponentTypePv");
+    */
+    
+    
+    
+/*
     void* component = createComponent();
 
-    auto typeInfo = getTypeInfo(component);
+    
 
-    minijson::writer_configuration config;
-    config = config.pretty_printing(true);
-    minijson::object_writer writer(std::cout, config);
-    typeInfo.Serialize(writer);
-    writer.close();
+    {
+        auto typeInfo = getTypeInfo(component);
+        minijson::writer_configuration config;
+        config = config.pretty_printing(true);
+        minijson::object_writer writer(std::cout, config);
+        typeInfo.Serialize(writer);
+        writer.close();
+    }
 
     ISystem* system = createSystem();
 
      system->Update(1.0f);
 
     deleteSystem(system);
+    */
+    
+    Database database;
+    database.AssureComponent<Hierarchy>();
+    database.AssureComponent<Transform>();
+    
+    auto createComponent = GetFunction<void*(int)>(interp, "CreateComponent");
+    auto removeComponent = GetFunction<void(void*, int)>(interp, "RemoveComponent");
+    auto getTypeFunction = GetFunction<TypeInfo(void*, int)>(interp, "_Z11GetTypeInfoPvi");
+    
+    database.AddCustomComponent(2, new ScriptContainer(2, createComponent, removeComponent, getTypeFunction), "Position");
+    
+    
+    Scene scene(database);
+    GameObject go = scene.CreateObject();
+    
+    auto addComponent = GetFunction<void(GameObject)>(interp, "AddComponent");// "_Z12AddComponentPv");
+     auto testFunction = GetFunction<void(GameObject)>(interp, "Test");// "_Z12AddComponentPv");
+    
+    addComponent(go);
+    
+    JsonSerializer serializer;
+    serializer.SerializeObject(go, std::cout);
+    
+    testFunction(go);
+    
+    scene.Update(0.0f);
+    
+    serializer.SerializeObject(go, std::cout);
+    
+    /*
+    {
+        auto typeInfo = getComponentType(&go);
+        minijson::writer_configuration config;
+        config = config.pretty_printing(true);
+        minijson::object_writer writer(std::cout, config);
+        typeInfo.Serialize(writer);
+        writer.close();
+    }
+    */
+    
     return 0;
 }

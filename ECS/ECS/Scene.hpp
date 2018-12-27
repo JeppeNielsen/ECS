@@ -71,9 +71,9 @@ private:
     }
     
     template<typename T>
-    void RemoveComponent(const GameObjectId object) {
-        const auto id = Database::IdHelper::GetId<T>();
-        removeComponentActions.insert(std::make_pair(object, id));
+    void RemoveComponent(const GameObjectId objectId) {
+        const auto componentId = Database::IdHelper::GetId<T>();
+        RemoveComponent(objectId, componentId);
     }
     
     template<typename Actions, typename Func>
@@ -84,6 +84,10 @@ private:
         }
         actions.clear();
     }
+    
+    void AddComponent(GameObjectId objectId, int componentId);
+    void* GetComponent(GameObjectId objectId, int componentId);
+    void RemoveComponent(GameObjectId objectId, int componentId);
     
     void UpdateSystems(float dt);
     void RemoveObjectFromDatabase(const GameObjectId object);

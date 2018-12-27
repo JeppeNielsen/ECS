@@ -80,3 +80,15 @@ void Scene::RemoveObjectFromDatabase(const GameObjectId object) {
     }
     database.Remove(object);
 }
+
+void Scene::AddComponent(GameObjectId objectId, int componentId) {
+    database.componentsIndexed[componentId]->CreateDefault(objectId);
+}
+
+void* Scene::GetComponent(GameObjectId objectId, int componentId) {
+    return database.componentsIndexed[componentId]->GetInstance(objectId);
+}
+
+void Scene::RemoveComponent(GameObjectId objectId, int componentId) {
+    removeComponentActions.insert(std::make_pair(objectId, componentId));
+}

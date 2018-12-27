@@ -38,6 +38,15 @@ public:
         componentNames.push_back(ClassNameHelper::GetName<T>());
     }
     
+    void AddCustomComponent(int id, IContainer* container, const std::string& name) {
+        if (id>=componentsIndexed.size()) {
+            componentsIndexed.resize(id + 1);
+        }
+        componentsIndexed[id] = std::unique_ptr<IContainer>(container);
+        components.push_back(componentsIndexed[id].get());
+        componentNames.push_back(name);
+    }
+    
     template<typename T>
     Container<T>& ComponentContainer() const {
         const auto id = IdHelper::GetId<T>();

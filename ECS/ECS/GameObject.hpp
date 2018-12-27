@@ -47,6 +47,10 @@ public:
     void IterateComponents(Func&& func) const;
     
     void Remove() const;
+    
+    void* AddComponent(int componentId) const;
+    void* GetComponent(int componentId) const;
+    void RemoveComponent(int componentId) const;
 
     Hierarchy& Hierarchy() const;
     GameObjectId Id() const;

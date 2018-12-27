@@ -48,3 +48,16 @@ Hierarchy& GameObject::Hierarchy() const {
 GameObjectId GameObject::Id() const { return id; }
 
 Scene& GameObject::Scene() const { return *scene; }
+
+void* GameObject::AddComponent(int componentId) const {
+    scene->AddComponent(id, componentId);
+    return GetComponent(componentId);
+}
+
+void* GameObject::GetComponent(int componentId) const {
+    return scene->GetComponent(id, componentId);
+}
+
+void GameObject::RemoveComponent(int componentId) const {
+    return scene->RemoveComponent(id, componentId);
+}

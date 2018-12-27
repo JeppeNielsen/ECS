@@ -64,6 +64,7 @@
 		7216B12021D3D3CE00EB4748 /* libclang.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libclang.dylib; path = cling/lib/libclang.dylib; sourceTree = "<group>"; };
 		7216B12121D3D3CE00EB4748 /* libcling.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcling.dylib; path = cling/lib/libcling.dylib; sourceTree = "<group>"; };
 		7216B12421D3D41300EB4748 /* testCling.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testCling.cpp; sourceTree = "<group>"; };
+		7216B12621D525AB00EB4748 /* Components.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Components.hpp; sourceTree = "<group>"; };
 		726CB1DF20FD2ADF009E1412 /* ECS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ECS; sourceTree = BUILT_PRODUCTS_DIR; };
 		726CB21F210509E4009E1412 /* ecs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ecs.cpp; sourceTree = "<group>"; };
 		72A86D8021090E98001BCF6B /* MetaHelper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MetaHelper.hpp; sourceTree = "<group>"; };
@@ -127,6 +128,7 @@
 			children = (
 				7216B0D221CEEEFD00EB4748 /* game.cpp */,
 				7216B0ED21D0373800EB4748 /* ScriptInclude.hpp */,
+				7216B12621D525AB00EB4748 /* Components.hpp */,
 			);
 			path = TestClang;
 			sourceTree = "<group>";
