@@ -63,9 +63,9 @@ namespace ECS {
     
 #define TYPE_FIELDS_BEGIN \
 public: \
-TypeInfo GetType() { \
+ECS::TypeInfo GetType() { \
     const static auto& name = ClassNameHelper::GetName<std::remove_const_t<std::remove_pointer_t<decltype(this)>>>(); \
-    TypeInfo info(name);
+    ECS::TypeInfo info(name);
 
 #define TYPE_FIELD(field) \
     info.AddField(#field, this->field);
