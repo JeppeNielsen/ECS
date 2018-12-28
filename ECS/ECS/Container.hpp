@@ -112,6 +112,7 @@ struct Container : public IContainer {
     }
     
     void* GetInstance(const GameObjectId id) override {
+        if (!Contains(id)) return nullptr;
         return Get(id);
     }
     
