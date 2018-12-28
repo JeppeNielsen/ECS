@@ -115,6 +115,7 @@ private:
 template<typename T, typename... Args>
 T* GameObject::AddComponent(Args&&... args) const {
     assert(operator bool());
+    assert(GetComponent<T>()==nullptr);
     return scene->AddComponent<T>(id, args...);
 }
 
@@ -133,6 +134,7 @@ T* GameObject::GetComponent() const {
 template<typename T>
 void GameObject::RemoveComponent() const {
     assert(operator bool());
+    assert(GetComponent<T>()!=nullptr);
     scene->RemoveComponent<T>(id);
 }
 
