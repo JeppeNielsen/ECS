@@ -47,6 +47,17 @@ public:
         }
     }
     
+    void AddCustomSystem(int systemId, ISystem* system) {
+        if (systemId>=systemsIndexed.size()) {
+            systemsIndexed.resize(systemId + 1);
+        }
+        if (!systemsIndexed[systemId]) {
+            systemsIndexed[systemId] = std::unique_ptr<ISystem>(system);
+            systemsIndexed[systemId]->InitializeComponents(this);
+            systems.push_back(systemsIndexed[systemId].get());
+        }
+    }
+    
     GameObject CreateObject();
     
     void Update(float dt);
@@ -134,7 +145,7 @@ void GameObject::IterateComponents(Func&& func) const {
 template<typename...T>
 void System<T...>::Initialize(Scene& scene) {
     this->scene = &scene;
-    components = std::make_unique<Components>((scene.GetDatabase().AssureComponent<T>(), scene.GetDatabase().ComponentContainer<T>())...);
+    components = std::make_unique<Components>((scene.GetDatabase().AssureComponent<T>(), System<T...>::GetPointer<T>())...);
 }
   
 }
