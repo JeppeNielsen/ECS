@@ -50,6 +50,7 @@ GameObjectId GameObject::Id() const { return id; }
 Scene& GameObject::Scene() const { return *scene; }
 
 void* GameObject::AddComponent(int componentId) const {
+    assert(GetComponent(componentId) == nullptr);
     scene->AddComponent(id, componentId);
     return GetComponent(componentId);
 }
@@ -59,5 +60,6 @@ void* GameObject::GetComponent(int componentId) const {
 }
 
 void GameObject::RemoveComponent(int componentId) const {
+    assert(GetComponent(componentId) != nullptr);
     return scene->RemoveComponent(id, componentId);
 }
