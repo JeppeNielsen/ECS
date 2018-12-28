@@ -48,14 +48,15 @@ public:
     
     void Remove() const;
     
-    void* AddComponent(int componentId) const;
-    void* GetComponent(int componentId) const;
-    void RemoveComponent(int componentId) const;
-
     Hierarchy& Hierarchy() const;
     GameObjectId Id() const;
     Scene& Scene() const;
 private:
+
+    void* AddComponent(int componentId) const;
+    void* GetComponent(int componentId) const;
+    void RemoveComponent(int componentId) const;
+
     class Scene* scene;
     GameObjectId id;
 };
