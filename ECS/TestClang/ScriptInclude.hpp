@@ -26,8 +26,17 @@ struct Position {
     TYPE_FIELDS_END
 };
 
-struct Velocity : System<Position> {
+struct VelocitySystem : System<Position, Transform> {
     void Update(float dt) override {
-        std::cout << "Update from Velocity system"<< std::endl;
+        std::cout << "Update from Velocity system" << std::endl;
     }
+    
+    void ObjectAdded(GameObject go) override {
+        std::cout << "Object added from Velocity system"<< std::endl;
+    }
+    
+    void ObjectRemoved(GameObject go) override {
+        std::cout << "Object removed from Velocity system"<< std::endl;
+    }
+    
 };

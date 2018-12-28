@@ -14,6 +14,7 @@
 #include "Scene.hpp"
 #include "Components.hpp"
 #include "JsonSerializer.hpp"
+#include "TestECS.hpp"
 
 using namespace ECS;
 
@@ -75,8 +76,23 @@ struct ScriptContainer : Container<ScriptComponent> {
     }
     
     void* GetInstance(const GameObjectId id) override {
+        if (!Contains(id)) return nullptr;
         ScriptComponent* component = Get(id);
         return component->data;
+    }
+};
+
+struct TransformSystem : System<Transform> {
+    void Update(float dt) override {
+        std::cout << "Update from Transform system" << std::endl;
+    }
+    
+    void ObjectAdded(GameObject go) override {
+        std::cout << "Object added from Transform system"<< std::endl;
+    }
+    
+    void ObjectRemoved(GameObject go) override {
+        std::cout << "Object removed from Transform system"<< std::endl;
     }
     
 };
@@ -115,11 +131,13 @@ int main() {
     code += "template<> void ECS::GameObject::RemoveComponent<Position>() const { RemoveComponent(2); } \n";
    
    
-    code += "extern \"C\" void AddComponent(GameObject go) { go.AddComponent<Position>()->x = 123; go.GetComponent<Position>()->y = 456; go.AddComponent<Transform>()->rotation = 777; } \n";
+    code += "extern \"C\" void AddComponent(GameObject go) { go.AddComponent<Position>()->x = 123; go.GetComponent<Position>()->y = 456; } \n";
     code += "TypeInfo GetTypeInfo(void* ptr, int id) { Position* comp = (Position*)ptr; return comp->GetType(); } \n";
     code += "extern \"C\" void* CreateComponent(int id) { return new Position(); } \n";
     code += "extern \"C\" void RemoveComponent(void* ptr, int id) { Position* component = (Position*)ptr; delete component; } \n";
-    code += "extern \"C\" void Test(GameObject go) { go.RemoveComponent<Position>(); std::cout << \"Will removed Component\"; } \n";
+    code += "extern \"C\" void Test(GameObject go) { go.RemoveComponent<Position>(); std::cout << \"Will removed Component\"<<go.GetComponent<Transform>()->x; } \n";
+    code += "extern \"C\" ISystem* CreateSystem(int id) { return new VelocitySystem(); } \n";
+    
     
 /*
 
@@ -180,17 +198,25 @@ interp.declare("#include \"ScriptInclude.hpp\" \n  TypeInfo GetComponentType(voi
     auto createComponent = GetFunction<void*(int)>(interp, "CreateComponent");
     auto removeComponent = GetFunction<void(void*, int)>(interp, "RemoveComponent");
     auto getTypeFunction = GetFunction<TypeInfo(void*, int)>(interp, "_Z11GetTypeInfoPvi");
+    auto createSystem = GetFunction<ISystem*(int)>(interp, "CreateSystem");
     
     database.AddCustomComponent(2, new ScriptContainer(2, createComponent, removeComponent, getTypeFunction), "Position");
     
     
     Scene scene(database);
+    //scene.CreateSystem<TransformSystem>();
+    scene.AddCustomSystem(0, createSystem(0));
+    
     GameObject go = scene.CreateObject();
+    
+    go.AddComponent<Transform>()->x = 661;
     
     auto addComponent = GetFunction<void(GameObject)>(interp, "AddComponent");// "_Z12AddComponentPv");
      auto testFunction = GetFunction<void(GameObject)>(interp, "Test");// "_Z12AddComponentPv");
     
     addComponent(go);
+    
+    scene.Update(0.0f);
     
     JsonSerializer serializer;
     serializer.SerializeObject(go, std::cout);
