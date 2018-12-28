@@ -18,44 +18,17 @@
 namespace ECS {
     class TypeInfo {
     public:
-        TypeInfo(const std::string& name) : name(name) { }
+        TypeInfo(const std::string& name);
+        void Serialize(minijson::object_writer& writer);
+        void Deserialize(minijson::istream_context& context);
+        const std::string& Name();
+        bool TryFindField(const std::string& name, FieldInfo& info);
         
         template<typename T>
         void AddField(const std::string& name, T& field) {
             fields.emplace_back(FieldInfo(name, field));
         }
-        
-        void Serialize(minijson::object_writer& writer) {
-            for(auto& field : fields) {
-                field.Serialize(writer);
-            }
-        }
-        
-        void Deserialize(minijson::istream_context& context) {
-            minijson::parse_object(context, [&] (const char* name, minijson::value jsonValue) {
-                FieldInfo field;
-                if (TryFindInfo(name, field)) {
-                    field.Deserialize(context, jsonValue);
-                }
-            });
-        }
-        
-        const std::string& Name() {
-            return name;
-        }
-        
     private:
-    
-        bool TryFindInfo(const std::string& name, FieldInfo& info) {
-            for(auto& field : fields) {
-                if (field.Name() == name) {
-                    info = field;
-                    return true;
-                }
-            }
-            return false;
-        }
-    
         std::string name;
         using Fields = std::vector<FieldInfo>;
         Fields fields;
