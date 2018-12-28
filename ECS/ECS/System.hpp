@@ -20,6 +20,7 @@ public:
     virtual ~ISystem() = default;
     virtual void TryAddObject(const GameObjectId object) = 0;
     virtual void TryRemoveObject(const GameObjectId object) = 0;
+    virtual void InitializeComponents(Scene* scene) = 0;
     virtual void Update(float dt) = 0;
     ObjectList objects;
 };
@@ -27,14 +28,21 @@ public:
 template<typename...T>
 class System : public ISystem {
 public:
-    using Components = std::tuple<Container<T> &...>;
+    using Components = std::tuple<T*...>;
 
     void Initialize(Scene& scene);
     
-    bool Match(const GameObjectId object) const {
+    void InitializeComponents(Scene* scene) override {
+        this->scene = scene;
+        components = std::make_unique<Components>(GetPointer<T>()...);
+    }
+
+    bool Match(const GameObjectId objectId) const {
         bool contains = true;
-        Meta::for_each(*components, [&contains, object](const auto& component) {
-           contains &= component.Contains(object);
+        GameObject object(*scene, objectId);
+        Meta::for_each(*components, [&contains, &object](auto component) {
+           using componentType = std::remove_pointer_t<decltype(component)>;
+           contains &= object.GetComponent<componentType>()!=nullptr;
         });
         return contains;
     }
@@ -83,6 +91,7 @@ protected:
     virtual void ObjectRemoved(GameObject object) {}
     Scene* scene;
 private:
+    template<typename TPointer> TPointer* GetPointer() { return nullptr; }
     std::unique_ptr<Components> components;
 };
 
