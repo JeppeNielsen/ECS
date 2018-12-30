@@ -10,6 +10,7 @@
 
 #include "minijson_writer.hpp"
 #include "minijson_reader.hpp"
+#include "GameObject.hpp"
 
 namespace ECS {
     template<typename T, typename I = void>
@@ -106,6 +107,18 @@ namespace ECS {
         static void Deserialize(minijson::istream_context& context, minijson::value& value, T& getTypeObject) {
             auto type = getTypeObject.GetType();
             type.Deserialize(context);
+        }
+    };
+    
+    template<>
+    struct FieldSerializer<ECS::GameObject> {
+        static void Serialize(minijson::object_writer& writer, const std::string& name, const ECS::GameObject& field) {
+            writer.write(name.c_str(), "GameObject");
+        }
+        
+        static void Deserialize(minijson::istream_context& context, minijson::value& value, ECS::GameObject& field) {
+            if (value.type() != minijson::String) return;
+        //    field = value.as_string();
         }
     };
 }

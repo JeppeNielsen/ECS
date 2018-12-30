@@ -6,23 +6,24 @@
 //  Copyright © 2017 Jeppe Nielsen. All rights reserved.
 //
 
-#include "ScriptData.hpp"
+#include "SystemComponentExtractor.hpp"
 #include <clang-c/Index.h>
 #include <iostream>
 #include <set>
 #include <map>
+#include <sstream>
 
 using namespace ECS;
 
-void ScriptData::Clear() {
+void SystemComponentExtractor::Clear() {
     components.clear();
     systems.clear();
 }
 
 CXChildVisitResult parseCode(CXCursor cursor, CXCursor parent, CXClientData clientData);
 
-bool ScriptData::Parse(const std::vector<std::string> &cppFiles, const std::vector<std::string> &includePaths, const std::function<bool(const std::string&)>& predicate) {
-    std::vector<const char*> arguments;
+bool SystemComponentExtractor::Extract(const std::vector<std::string> &cppFiles, const std::vector<std::string> &includePaths, const std::function<bool(const std::string&)>& predicate) {
+    std::vector<std::string> arguments;
     arguments.push_back("c++");
     arguments.push_back("-std=c++14");
     arguments.push_back("-stdlib=libc++");
@@ -30,13 +31,15 @@ bool ScriptData::Parse(const std::vector<std::string> &cppFiles, const std::vect
     arguments.push_back("-I/usr/include");
     arguments.push_back("-I/usr/include/c++/4.2.1/");
     arguments.push_back("-I/Users/Jeppe/Downloads/clang+llvm-3.7.0-x86_64-apple-darwin/lib/clang/3.7.0/include");
+    /*
     arguments.push_back("-I/Projects/ECS/ECS/ECS");
     arguments.push_back("-I/Projects/ECS/ECS/Reflection");
     arguments.push_back("-I/Projects/ECS/ECS/Serialization");
     arguments.push_back("-I/Projects/ECS/ECS/Json");
     arguments.push_back("-I/Projects/ECS/ECS/Helpers");
+    */
     
-    for(auto includePath : includePaths) {
+    for(const auto& includePath : includePaths) {
         std::string extraPath = "-I" + includePath;
         arguments.push_back(extraPath.c_str());
     }
@@ -44,8 +47,13 @@ bool ScriptData::Parse(const std::vector<std::string> &cppFiles, const std::vect
     for(auto cppFile : cppFiles) {
         CXIndex index = clang_createIndex(0,1);
 
+        std::vector<const char*> argumentsList;
+        for(auto& s : arguments) {
+            argumentsList.push_back(s.c_str());
+        }
+
         // create Translation Unit
-        CXTranslationUnit tu = clang_parseTranslationUnit(index, cppFile.c_str(), &arguments[0], (int)arguments.size(), NULL, 0, 0);
+        CXTranslationUnit tu = clang_parseTranslationUnit(index, cppFile.c_str(), &argumentsList[0], (int)argumentsList.size(), NULL, 0, 0);
         if (tu == NULL) {
             printf("Cannot parse translation unit\n");
             return false;
@@ -101,7 +109,7 @@ bool ScriptData::Parse(const std::vector<std::string> &cppFiles, const std::vect
     return true;
 }
 
-ScriptData::Component* ScriptData::FindComponent(const std::string &name) {
+SystemComponentExtractor::Component* SystemComponentExtractor::FindComponent(const std::string &name) {
     for(auto& c : components) {
         if (c.name == name) return &c;
     }
@@ -134,7 +142,7 @@ CXChildVisitResult parseCode(CXCursor cursor, CXCursor parent, CXClientData clie
         return CXChildVisit_Continue;
     }
     
-    ScriptData& scriptData = *static_cast<ScriptData*>(clientData);
+    SystemComponentExtractor& scriptData = *static_cast<SystemComponentExtractor*>(clientData);
     
     std::string cursorSpelling = getCursorSpelling2(cursor);
     
@@ -151,7 +159,7 @@ CXChildVisitResult parseCode(CXCursor cursor, CXCursor parent, CXClientData clie
         isSystem = false;
     } else if (cursor.kind == CXCursor_StructDecl || cursor.kind == CXCursor_ClassDecl) {
         
-        ScriptData::Component component;
+        SystemComponentExtractor::Component component;
         if (nameSpace!="") {
             component.name = nameSpace +"::" + cursorSpelling;
         } else {
@@ -175,3 +183,16 @@ CXChildVisitResult parseCode(CXCursor cursor, CXCursor parent, CXClientData clie
     
     return CXChildVisit_Recurse;
 }
+
+
+/*
+std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> elems;
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
+}
+*/

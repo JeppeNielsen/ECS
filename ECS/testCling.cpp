@@ -24,7 +24,7 @@ T* GetFunction(cling::Interpreter& interpreter, const std::string& functionName)
   T* func = cling::utils::VoidToFunctionPtr<T*>(functionAddr);
   return func;
 }
-
+/*
 using createComponentFunction = void*(int);
 using removeComponentFunction = void(void*, int);
 using getComponentTypeInfoFunction = TypeInfo(void*, int);
@@ -82,6 +82,8 @@ struct ScriptContainer : Container<ScriptComponent> {
     }
 };
 
+*/
+
 struct TransformSystem : System<Transform> {
     void Update(float dt) override {
         std::cout << "Update from Transform system" << std::endl;
@@ -97,7 +99,7 @@ struct TransformSystem : System<Transform> {
     
 };
 
-int main() {
+int main_cling() {
 
     std::vector<const char*> arguments;
 
@@ -133,9 +135,9 @@ int main() {
    
     code += "extern \"C\" void AddComponent(GameObject go) { go.AddComponent<Position>()->x = 123; go.GetComponent<Position>()->y = 456; } \n";
     code += "TypeInfo GetTypeInfo(void* ptr, int id) { Position* comp = (Position*)ptr; return comp->GetType(); } \n";
-    code += "extern \"C\" void* CreateComponent(int id) { return new Position(); } \n";
-    code += "extern \"C\" void RemoveComponent(void* ptr, int id) { Position* component = (Position*)ptr; delete component; } \n";
-    code += "extern \"C\" void Test(GameObject go) { go.RemoveComponent<Position>(); std::cout << \"Will removed Component\"<<go.GetComponent<Transform>()->x; } \n";
+    code += "extern \"C\" void* CreateComponent(int id) { std::cout << \"Position ctor\"<<std::endl; return new Position(); } \n";
+    code += "extern \"C\" void RemoveComponent(void* ptr, int id) { std::cout << \"Position dtor\"<<std::endl;  Position* component = (Position*)ptr; delete component; } \n";
+    code += "extern \"C\" void Test(GameObject go) { std::cout << \"Will removed Component\"<<go.GetComponent<Position>()->x; } \n";
     code += "extern \"C\" ISystem* CreateSystem(int id) { return new VelocitySystem(); } \n";
     
     
@@ -200,7 +202,7 @@ interp.declare("#include \"ScriptInclude.hpp\" \n  TypeInfo GetComponentType(voi
     auto getTypeFunction = GetFunction<TypeInfo(void*, int)>(interp, "_Z11GetTypeInfoPvi");
     auto createSystem = GetFunction<ISystem*(int)>(interp, "CreateSystem");
     
-    database.AddCustomComponent(2, new ScriptContainer(2, createComponent, removeComponent, getTypeFunction), "Position");
+    //database.AddCustomComponent(2, new ScriptContainer(2, createComponent, removeComponent, getTypeFunction), "Position");
     
     
     Scene scene(database);
@@ -209,12 +211,27 @@ interp.declare("#include \"ScriptInclude.hpp\" \n  TypeInfo GetComponentType(voi
     
     GameObject go = scene.CreateObject();
     
-    go.AddComponent<Transform>()->x = 661;
+    //go.AddComponent<Transform>()->x = 661;
+    //go.AddComponent<Transform>()->y = 3;
+    
     
     auto addComponent = GetFunction<void(GameObject)>(interp, "AddComponent");// "_Z12AddComponentPv");
-     auto testFunction = GetFunction<void(GameObject)>(interp, "Test");// "_Z12AddComponentPv");
+    auto testFunction = GetFunction<void(GameObject)>(interp, "Test");// "_Z12AddComponentPv");
     
-    addComponent(go);
+    //addComponent(go);
+    
+    go.AddComponent(1);
+    go.AddComponent(2);
+    
+    FieldInfo xField;
+    if (getTypeFunction(go.GetComponent(2), 2).TryFindField("x", xField)) {
+        int* field = xField.GetField<int>();
+        *field = 123;
+    } else {
+        std::cout << "field with name x not found" << std::endl;
+    }
+    
+    
     
     scene.Update(0.0f);
     

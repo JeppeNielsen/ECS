@@ -13,9 +13,9 @@
 #include <functional>
 
 namespace ECS {
-    class ScriptData {
+    class SystemComponentExtractor {
     public:
-        bool Parse(const std::vector<std::string>& cppFiles, const std::vector<std::string>& includePaths, const std::function<bool(const std::string&)>& predicate);
+        bool Extract(const std::vector<std::string>& cppFiles, const std::vector<std::string>& includePaths, const std::function<bool(const std::string&)>& predicate);
         
         struct System {
             std::string name;
@@ -42,5 +42,6 @@ namespace ECS {
         Component* FindComponent(const std::string& name);
         
         void Clear();
+        
     };
 }

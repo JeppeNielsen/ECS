@@ -16,6 +16,7 @@
 
 using namespace ECS;
 
+/*
 struct Position {
     int x;
     int y;
@@ -40,3 +41,4 @@ struct VelocitySystem : System<Position, Transform> {
     }
     
 };
+*/

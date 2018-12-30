@@ -51,12 +51,11 @@ public:
     Hierarchy& Hierarchy() const;
     GameObjectId Id() const;
     Scene& Scene() const;
-private:
-
+    
     void* AddComponent(int componentId) const;
     void* GetComponent(int componentId) const;
     void RemoveComponent(int componentId) const;
-
+private:
     class Scene* scene;
     GameObjectId id;
 };

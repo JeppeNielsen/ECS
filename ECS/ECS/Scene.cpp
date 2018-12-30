@@ -61,6 +61,10 @@ bool Scene::IsEmpty() const {
     return objects.objects.empty();
 }
 
+int Scene::GetMaxSystemIndex() const {
+    return (int)systemsIndexed.size();
+}
+
 void Scene::RemoveObject(const GameObjectId object) {
     removeActions.insert(object);
 }
@@ -91,4 +95,15 @@ void* Scene::GetComponent(GameObjectId objectId, int componentId) {
 
 void Scene::RemoveComponent(GameObjectId objectId, int componentId) {
     removeComponentActions.insert(std::make_pair(objectId, componentId));
+}
+
+void Scene::AddCustomSystem(int systemId, ISystem* system) {
+    if (systemId>=systemsIndexed.size()) {
+        systemsIndexed.resize(systemId + 1);
+    }
+    if (!systemsIndexed[systemId]) {
+        systemsIndexed[systemId] = std::unique_ptr<ISystem>(system);
+        systemsIndexed[systemId]->InitializeComponents(this);
+        systems.push_back(systemsIndexed[systemId].get());
+    }
 }

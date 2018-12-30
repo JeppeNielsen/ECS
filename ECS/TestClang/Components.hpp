@@ -8,6 +8,7 @@
 
 #pragma once
 #include "TypeInfo.hpp"
+#include "Event.hpp"
 
 struct Transform {
     float x;
@@ -20,3 +21,16 @@ struct Transform {
     TYPE_FIELD(rotation)
     TYPE_FIELDS_END
 };
+
+struct Touchable {
+    bool ClickThrough;
+    Event<Touchable> Down;
+    Event<Touchable> Up;
+    Event<Touchable> Clicked;
+    
+    TYPE_FIELDS_BEGIN
+    TYPE_FIELD(ClickThrough)
+    TYPE_FIELDS_END
+
+};
+

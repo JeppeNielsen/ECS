@@ -47,16 +47,7 @@ public:
         }
     }
     
-    void AddCustomSystem(int systemId, ISystem* system) {
-        if (systemId>=systemsIndexed.size()) {
-            systemsIndexed.resize(systemId + 1);
-        }
-        if (!systemsIndexed[systemId]) {
-            systemsIndexed[systemId] = std::unique_ptr<ISystem>(system);
-            systemsIndexed[systemId]->InitializeComponents(this);
-            systems.push_back(systemsIndexed[systemId].get());
-        }
-    }
+    void AddCustomSystem(int systemId, ISystem* system);
     
     GameObject CreateObject();
     
@@ -65,6 +56,9 @@ public:
     Database& GetDatabase() const;
     
     bool IsEmpty() const;
+    
+    int GetMaxSystemIndex() const;
+    
 private:
     
     void RemoveObject(const GameObjectId object);

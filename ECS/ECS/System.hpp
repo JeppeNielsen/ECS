@@ -89,6 +89,7 @@ public:
 protected:
     virtual void ObjectAdded(GameObject object) {}
     virtual void ObjectRemoved(GameObject object) {}
+    virtual void Update(float dt) override {}
     Scene* scene;
 private:
     template<typename TPointer> TPointer* GetPointer() { return nullptr; }

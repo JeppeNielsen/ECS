@@ -65,3 +65,37 @@ IContainer* Database::FindComponentContainer(const std::string& componentName) {
     return nullptr;
 }
 
+std::vector<Database::NameIndex> Database::GetComponentNameIndices() {
+    std::vector<Database::NameIndex> indicies;
+    for (int i = 0; i<components.size(); ++i) {
+        int foundIndex = -1;
+        for(int o = 0; o<componentsIndexed.size(); ++o) {
+            if (componentsIndexed[o].get() == components[i]) {
+                foundIndex = o;
+                break;
+            }
+        }
+        indicies.push_back(std::make_pair(componentNames[i], foundIndex));
+    }
+    return indicies;
+}
+
+void Database::AddCustomComponent(int id, IContainer* container, const std::string& name) {
+    if (id>=componentsIndexed.size()) {
+        componentsIndexed.resize(id + 1);
+    }
+    componentsIndexed[id] = std::unique_ptr<IContainer>(container);
+    components.push_back(componentsIndexed[id].get());
+    componentNames.push_back(name);
+}
+
+void Database::RemoveCustomComponent(int id) {
+    for (size_t i = 0; i<components.size(); i++) {
+        if (components[i] == componentsIndexed[id].get()) {
+            components.erase(components.begin() + i);
+            componentNames.erase(componentNames.begin() + i);
+            break;
+        }
+    }
+    componentsIndexed[id] = nullptr;
+}

@@ -14,10 +14,12 @@
 		7216B0D621CEF19300EB4748 /* CommandRunner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B0D421CEF19300EB4748 /* CommandRunner.cpp */; };
 		7216B0D921CEF2A000EB4748 /* ScriptCompiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B0D721CEF2A000EB4748 /* ScriptCompiler.cpp */; };
 		7216B0DB21CEF45D00EB4748 /* testScripting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B0DA21CEF45D00EB4748 /* testScripting.cpp */; };
-		7216B0EC21D0278100EB4748 /* ScriptData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B0EB21D0278100EB4748 /* ScriptData.cpp */; };
+		7216B0EC21D0278100EB4748 /* SystemComponentExtractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B0EB21D0278100EB4748 /* SystemComponentExtractor.cpp */; };
 		7216B12221D3D3CE00EB4748 /* libclang.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7216B12021D3D3CE00EB4748 /* libclang.dylib */; };
 		7216B12321D3D3CE00EB4748 /* libcling.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7216B12121D3D3CE00EB4748 /* libcling.dylib */; };
 		7216B12521D3D41300EB4748 /* testCling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B12421D3D41300EB4748 /* testCling.cpp */; };
+		7216B12921D6D0B400EB4748 /* ScriptWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B12721D6D0B400EB4748 /* ScriptWorld.cpp */; };
+		7216B12C21D8402900EB4748 /* FileHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B12A21D8402900EB4748 /* FileHelper.cpp */; };
 		726CB221210509E4009E1412 /* ecs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 726CB21F210509E4009E1412 /* ecs.cpp */; };
 		72A86D8621091268001BCF6B /* ObjectList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D8421091268001BCF6B /* ObjectList.cpp */; };
 		72A86D8921091451001BCF6B /* Database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D8721091451001BCF6B /* Database.cpp */; };
@@ -58,13 +60,17 @@
 		7216B0D721CEF2A000EB4748 /* ScriptCompiler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptCompiler.cpp; sourceTree = "<group>"; };
 		7216B0D821CEF2A000EB4748 /* ScriptCompiler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScriptCompiler.hpp; sourceTree = "<group>"; };
 		7216B0DA21CEF45D00EB4748 /* testScripting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testScripting.cpp; sourceTree = "<group>"; };
-		7216B0EA21D0278100EB4748 /* ScriptData.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ScriptData.hpp; sourceTree = "<group>"; };
-		7216B0EB21D0278100EB4748 /* ScriptData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptData.cpp; sourceTree = "<group>"; };
+		7216B0EA21D0278100EB4748 /* SystemComponentExtractor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SystemComponentExtractor.hpp; sourceTree = "<group>"; };
+		7216B0EB21D0278100EB4748 /* SystemComponentExtractor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemComponentExtractor.cpp; sourceTree = "<group>"; };
 		7216B0ED21D0373800EB4748 /* ScriptInclude.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScriptInclude.hpp; sourceTree = "<group>"; };
 		7216B12021D3D3CE00EB4748 /* libclang.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libclang.dylib; path = cling/lib/libclang.dylib; sourceTree = "<group>"; };
 		7216B12121D3D3CE00EB4748 /* libcling.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcling.dylib; path = cling/lib/libcling.dylib; sourceTree = "<group>"; };
 		7216B12421D3D41300EB4748 /* testCling.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testCling.cpp; sourceTree = "<group>"; };
 		7216B12621D525AB00EB4748 /* Components.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Components.hpp; sourceTree = "<group>"; };
+		7216B12721D6D0B400EB4748 /* ScriptWorld.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScriptWorld.cpp; sourceTree = "<group>"; };
+		7216B12821D6D0B400EB4748 /* ScriptWorld.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScriptWorld.hpp; sourceTree = "<group>"; };
+		7216B12A21D8402900EB4748 /* FileHelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileHelper.cpp; sourceTree = "<group>"; };
+		7216B12B21D8402900EB4748 /* FileHelper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FileHelper.hpp; sourceTree = "<group>"; };
 		726CB1DF20FD2ADF009E1412 /* ECS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ECS; sourceTree = BUILT_PRODUCTS_DIR; };
 		726CB21F210509E4009E1412 /* ecs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ecs.cpp; sourceTree = "<group>"; };
 		72A86D8021090E98001BCF6B /* MetaHelper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MetaHelper.hpp; sourceTree = "<group>"; };
@@ -136,10 +142,12 @@
 		7216B0D321CEF17600EB4748 /* Scripting */ = {
 			isa = PBXGroup;
 			children = (
-				7216B0EB21D0278100EB4748 /* ScriptData.cpp */,
-				7216B0EA21D0278100EB4748 /* ScriptData.hpp */,
+				7216B0EB21D0278100EB4748 /* SystemComponentExtractor.cpp */,
+				7216B0EA21D0278100EB4748 /* SystemComponentExtractor.hpp */,
 				7216B0D721CEF2A000EB4748 /* ScriptCompiler.cpp */,
 				7216B0D821CEF2A000EB4748 /* ScriptCompiler.hpp */,
+				7216B12721D6D0B400EB4748 /* ScriptWorld.cpp */,
+				7216B12821D6D0B400EB4748 /* ScriptWorld.hpp */,
 			);
 			path = Scripting;
 			sourceTree = "<group>";
@@ -212,6 +220,8 @@
 				72A86D9A210B487F001BCF6B /* ClassNameHelper.hpp */,
 				7216B0D421CEF19300EB4748 /* CommandRunner.cpp */,
 				7216B0D521CEF19300EB4748 /* CommandRunner.hpp */,
+				7216B12A21D8402900EB4748 /* FileHelper.cpp */,
+				7216B12B21D8402900EB4748 /* FileHelper.hpp */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -325,11 +335,13 @@
 				72A86D92210918A2001BCF6B /* GameObject.cpp in Sources */,
 				72A86DB6215675C1001BCF6B /* TestECS.cpp in Sources */,
 				72A86D8621091268001BCF6B /* ObjectList.cpp in Sources */,
+				7216B12C21D8402900EB4748 /* FileHelper.cpp in Sources */,
+				7216B12921D6D0B400EB4748 /* ScriptWorld.cpp in Sources */,
 				7216B0CA21B076DC00EB4748 /* FieldInfo.cpp in Sources */,
 				7216B0DB21CEF45D00EB4748 /* testScripting.cpp in Sources */,
 				72A86D8921091451001BCF6B /* Database.cpp in Sources */,
 				72A86D98210A6982001BCF6B /* serialization.cpp in Sources */,
-				7216B0EC21D0278100EB4748 /* ScriptData.cpp in Sources */,
+				7216B0EC21D0278100EB4748 /* SystemComponentExtractor.cpp in Sources */,
 				7216B0C721B075BE00EB4748 /* TypeInfo.cpp in Sources */,
 				7216B0D621CEF19300EB4748 /* CommandRunner.cpp in Sources */,
 				72A86DB121567291001BCF6B /* Test.cpp in Sources */,
