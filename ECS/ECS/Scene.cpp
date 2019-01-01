@@ -37,12 +37,12 @@ void Scene::Update(float dt) {
     });
     
     DoActions(removeComponentActions, [this] (const auto& pair) {
-        database.RemoveComponent(pair.first, pair.second);
         for(const auto& system : systems) {
             if (system->objects.Contains(pair.first)) {
                 system->TryRemoveObject(pair.first);
             }
         }
+        database.RemoveComponent(pair.first, pair.second);
     });
     
     DoActions(removeActions, [this] (const auto object) {
@@ -76,16 +76,17 @@ void Scene::UpdateSystems(float dt) {
 }
 
 void Scene::RemoveObjectFromDatabase(const GameObjectId object) {
-    database.RemoveAllComponents(object);
     for(const auto& system : systems) {
         if (system->objects.Contains(object)) {
             system->TryRemoveObject(object);
         }
     }
+    database.RemoveAllComponents(object);
     database.Remove(object);
 }
 
 void Scene::AddComponent(GameObjectId objectId, int componentId) {
+    addComponentActions.insert(objectId);
     database.componentsIndexed[componentId]->CreateDefault(objectId);
 }
 
@@ -106,4 +107,18 @@ void Scene::AddCustomSystem(int systemId, ISystem* system) {
         systemsIndexed[systemId]->InitializeComponents(this);
         systems.push_back(systemsIndexed[systemId].get());
     }
+}
+
+void Scene::RemoveCustomSystem(int systemId) {
+    for(size_t i=0; i<systems.size(); ++i ) {
+        if (systems[i] == systemsIndexed[systemId].get()) {
+            systems.erase(systems.begin() + i);
+            break;
+        }
+    }
+    systemsIndexed[systemId] = nullptr;
+}
+
+const GameObjectIterator Scene::Objects() {
+    return GameObjectIterator(*this, objects.objects, 0);
 }

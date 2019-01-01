@@ -48,7 +48,7 @@ public:
         return static_cast<Container<T>&>(*componentsIndexed[id]);
     }
     
-    IContainer* FindComponentContainer(const std::string& componentName);
+    bool TryFindComponentContainer(const std::string& componentName, IContainer** container, int& componentId);
     
     using NameIndex = std::pair<std::string, int>;
     
@@ -83,6 +83,15 @@ private:
         for(auto& component : components) {
             if (!component->Contains(objectId)) continue;
             func(component);
+        }
+    }
+    
+    template<typename Func>
+    void IterateComponentsWithIndex(const GameObjectId objectId, Func&& func) const {
+        for (size_t i=0; i<componentsIndexed.size(); ++i) {
+            if (!componentsIndexed[i]) continue;
+            if (!componentsIndexed[i]->Contains(objectId)) continue;
+            func(componentsIndexed[i].get(), (int)i);
         }
     }
     

@@ -56,13 +56,19 @@ void Database::Remove(const GameObjectId objectId) {
     ++available;
 }
 
-IContainer* Database::FindComponentContainer(const std::string& componentName) {
+bool Database::TryFindComponentContainer(const std::string& componentName, IContainer** container, int& componentId) {
     for (auto i = 0; i<componentNames.size(); ++i) {
         if (componentNames[i] == componentName) {
-            return components[i];
+            for(auto o = 0; o<componentsIndexed.size(); ++o) {
+                if (componentsIndexed[o].get() == components[i]) {
+                    *container = components[i];
+                    componentId = o;
+                    return true;
+                }
+            }
         }
     }
-    return nullptr;
+    return false;
 }
 
 std::vector<Database::NameIndex> Database::GetComponentNameIndices() {

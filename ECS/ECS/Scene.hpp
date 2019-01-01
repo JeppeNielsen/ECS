@@ -48,6 +48,7 @@ public:
     }
     
     void AddCustomSystem(int systemId, ISystem* system);
+    void RemoveCustomSystem(int systemId);
     
     GameObject CreateObject();
     
@@ -58,6 +59,8 @@ public:
     bool IsEmpty() const;
     
     int GetMaxSystemIndex() const;
+    
+    const GameObjectIterator Objects();
     
 private:
     
@@ -136,6 +139,12 @@ template<typename Func>
 void GameObject::IterateComponents(Func&& func) const {
     assert(operator bool());
     scene->database.IterateComponents(id, func);
+}
+
+template<typename Func>
+void GameObject::IterateComponentsWithIndex(Func&& func) const {
+    assert(operator bool());
+    scene->database.IterateComponentsWithIndex(id, func);
 }
 
 template<typename...T>

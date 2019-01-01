@@ -20,6 +20,9 @@
 		7216B12521D3D41300EB4748 /* testCling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B12421D3D41300EB4748 /* testCling.cpp */; };
 		7216B12921D6D0B400EB4748 /* ScriptWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B12721D6D0B400EB4748 /* ScriptWorld.cpp */; };
 		7216B12C21D8402900EB4748 /* FileHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B12A21D8402900EB4748 /* FileHelper.cpp */; };
+		7216B12F21DBA2AA00EB4748 /* SerializedScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B12D21DBA2AA00EB4748 /* SerializedScene.cpp */; };
+		7216B13221DBA81700EB4748 /* GameObjectIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B13021DBA81700EB4748 /* GameObjectIterator.cpp */; };
+		7216B13421DBFB9A00EB4748 /* game2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B13321DBFB9A00EB4748 /* game2.cpp */; };
 		726CB221210509E4009E1412 /* ecs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 726CB21F210509E4009E1412 /* ecs.cpp */; };
 		72A86D8621091268001BCF6B /* ObjectList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D8421091268001BCF6B /* ObjectList.cpp */; };
 		72A86D8921091451001BCF6B /* Database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D8721091451001BCF6B /* Database.cpp */; };
@@ -71,6 +74,11 @@
 		7216B12821D6D0B400EB4748 /* ScriptWorld.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScriptWorld.hpp; sourceTree = "<group>"; };
 		7216B12A21D8402900EB4748 /* FileHelper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileHelper.cpp; sourceTree = "<group>"; };
 		7216B12B21D8402900EB4748 /* FileHelper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FileHelper.hpp; sourceTree = "<group>"; };
+		7216B12D21DBA2AA00EB4748 /* SerializedScene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SerializedScene.cpp; sourceTree = "<group>"; };
+		7216B12E21DBA2AA00EB4748 /* SerializedScene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SerializedScene.hpp; sourceTree = "<group>"; };
+		7216B13021DBA81700EB4748 /* GameObjectIterator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameObjectIterator.cpp; sourceTree = "<group>"; };
+		7216B13121DBA81700EB4748 /* GameObjectIterator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GameObjectIterator.hpp; sourceTree = "<group>"; };
+		7216B13321DBFB9A00EB4748 /* game2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game2.cpp; sourceTree = "<group>"; };
 		726CB1DF20FD2ADF009E1412 /* ECS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ECS; sourceTree = BUILT_PRODUCTS_DIR; };
 		726CB21F210509E4009E1412 /* ecs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ecs.cpp; sourceTree = "<group>"; };
 		72A86D8021090E98001BCF6B /* MetaHelper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MetaHelper.hpp; sourceTree = "<group>"; };
@@ -132,6 +140,7 @@
 		7216B0D121CEEED900EB4748 /* TestClang */ = {
 			isa = PBXGroup;
 			children = (
+				7216B13321DBFB9A00EB4748 /* game2.cpp */,
 				7216B0D221CEEEFD00EB4748 /* game.cpp */,
 				7216B0ED21D0373800EB4748 /* ScriptInclude.hpp */,
 				7216B12621D525AB00EB4748 /* Components.hpp */,
@@ -148,6 +157,8 @@
 				7216B0D821CEF2A000EB4748 /* ScriptCompiler.hpp */,
 				7216B12721D6D0B400EB4748 /* ScriptWorld.cpp */,
 				7216B12821D6D0B400EB4748 /* ScriptWorld.hpp */,
+				7216B12D21DBA2AA00EB4748 /* SerializedScene.cpp */,
+				7216B12E21DBA2AA00EB4748 /* SerializedScene.hpp */,
 			);
 			path = Scripting;
 			sourceTree = "<group>";
@@ -210,6 +221,8 @@
 				72A86D8A21091706001BCF6B /* Scene.cpp */,
 				72A86D8B21091706001BCF6B /* Scene.hpp */,
 				72A86D8E21091873001BCF6B /* System.hpp */,
+				7216B13021DBA81700EB4748 /* GameObjectIterator.cpp */,
+				7216B13121DBA81700EB4748 /* GameObjectIterator.hpp */,
 			);
 			path = ECS;
 			sourceTree = "<group>";
@@ -336,10 +349,13 @@
 				72A86DB6215675C1001BCF6B /* TestECS.cpp in Sources */,
 				72A86D8621091268001BCF6B /* ObjectList.cpp in Sources */,
 				7216B12C21D8402900EB4748 /* FileHelper.cpp in Sources */,
+				7216B13421DBFB9A00EB4748 /* game2.cpp in Sources */,
 				7216B12921D6D0B400EB4748 /* ScriptWorld.cpp in Sources */,
 				7216B0CA21B076DC00EB4748 /* FieldInfo.cpp in Sources */,
+				7216B13221DBA81700EB4748 /* GameObjectIterator.cpp in Sources */,
 				7216B0DB21CEF45D00EB4748 /* testScripting.cpp in Sources */,
 				72A86D8921091451001BCF6B /* Database.cpp in Sources */,
+				7216B12F21DBA2AA00EB4748 /* SerializedScene.cpp in Sources */,
 				72A86D98210A6982001BCF6B /* serialization.cpp in Sources */,
 				7216B0EC21D0278100EB4748 /* SystemComponentExtractor.cpp in Sources */,
 				7216B0C721B075BE00EB4748 /* TypeInfo.cpp in Sources */,

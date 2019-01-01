@@ -16,9 +16,10 @@ namespace ECS {
     public:
         JsonDeserializer();
         void DeserializeObject(GameObject object, std::istream& stream);
+        void DeserializeComponents(GameObject object, std::istream& stream);
     private:
-    
         void Deserialize(GameObject object, minijson::istream_context &context, const std::function<void(GameObject)>& objectCreated);
         void DeserializeComponent(GameObject object, minijson::istream_context &context, const std::string& componentName);
+        void DeserializeComponentsInternal(GameObject object, minijson::istream_context &context);
     };
 }

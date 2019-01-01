@@ -10,12 +10,14 @@ struct Position {
 struct Velocity {
     float vx;
     float vy;
+    float vz;
     std::vector<int> numbers;
 };
 
 struct Pointer {
     GameObject pointer;
 };
+
 
 struct VelocitySystem : System<Position, Velocity> {
     void ObjectAdded(GameObject go) override {
@@ -32,19 +34,29 @@ struct VelocitySystem : System<Position, Velocity> {
         for(auto go : Objects()) {
             auto pos = go.GetComponent<Position>();
             auto vel = go.GetComponent<Velocity>();
-            pos->x+=vel->vx * dt;
+            pos->x-=vel->vx * dt;
             pos->y+=vel->vy * dt;
+            pos->y+=vel->vz * dt;
             
             std::cout << "position = "<< pos->x << std::endl;
         }
     }
 };
 
+
 struct PointerSystem : System<Pointer, Velocity> {
     
+};
+
+
+struct SimpleSystemSystem : System<Velocity> {
+    void ObjectAdded(GameObject go) override {
+        std::cout << "Object added " << go.GetComponent<Velocity>()->vx << std::endl;
+    }
     
-
-
+    void ObjectRemoved(GameObject go) override {
+        std::cout << "Object removed " << go.GetComponent<Velocity>()->vx << std::endl;
+    }
 };
 
 }

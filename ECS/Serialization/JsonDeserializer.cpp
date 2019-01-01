@@ -33,19 +33,22 @@ void JsonDeserializer::DeserializeObject(GameObject object, std::istream& stream
     }
 }
 
+void JsonDeserializer::DeserializeComponents(GameObject object, std::istream& stream) {
+    minijson::istream_context context(stream);
+    try {
+        DeserializeComponentsInternal(object, context);
+    } catch (minijson::parse_error e) {
+        std::cout << e.what() << " at position: " << e.offset() << std::endl;
+    }
+}
+
 void JsonDeserializer::Deserialize(GameObject object, minijson::istream_context &context, const std::function<void(GameObject)>& objectCreated) {
     minijson::parse_object(context, [&] (const char* n, minijson::value v) {
         std::string name = n;
         if (name == "id" && v.type() == minijson::Number) {
            // object->id = (int)v.as_long();
         } else if (name == "Components" && v.type() == minijson::Object) {
-            minijson::parse_object(context, [&] (const char* name, minijson::value v) {
-                if (v.type() == minijson::Object) {
-                    DeserializeComponent(object, context, name);
-                } else {
-                    minijson::ignore(context);
-                }
-            });
+            DeserializeComponentsInternal(object, context);
         } else if (name == "Children" && v.type() == minijson::Array) {
             minijson::parse_array(context, [&] (minijson::value v) {
                 if (v.type() == minijson::Object) {
@@ -69,10 +72,20 @@ void JsonDeserializer::Deserialize(GameObject object, minijson::istream_context 
 void JsonDeserializer::DeserializeComponent(ECS::GameObject object, minijson::istream_context &context, const std::string &componentName){
     auto& database = object.Scene().GetDatabase();
 
-    auto container = database.FindComponentContainer(componentName);
+    IContainer* container;
+    int componentId;
+    if (!database.TryFindComponentContainer(componentName, &container, componentId)) return;
     
-    if (!container) return;
-    
-    container->CreateDefault(object.Id());
+    object.AddComponent(componentId);
     container->Deserialize(object.Id(), context);
+}
+
+void JsonDeserializer::DeserializeComponentsInternal(ECS::GameObject object, minijson::istream_context &context) {
+    minijson::parse_object(context, [&] (const char* name, minijson::value v) {
+        if (v.type() == minijson::Object) {
+            DeserializeComponent(object, context, name);
+        } else {
+            minijson::ignore(context);
+        }
+    });
 }

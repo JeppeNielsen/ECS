@@ -12,6 +12,7 @@
 #include "Container.hpp"
 #include "GameObject.hpp"
 #include "MetaHelper.hpp"
+#include "GameObjectIterator.hpp"
 
 namespace ECS {
 
@@ -54,36 +55,13 @@ public:
     }
     
     void TryRemoveObject(const GameObjectId object) override {
-        if (Match(object)) return;
+        if (!Match(object)) return;
         ObjectRemoved(GameObject(*scene, object));
         objects.Remove(object);
     }
     
-    struct Iterator {
-        Iterator(Scene& scene, ObjectList::Objects& objects, std::size_t index) : scene(scene), objects(objects), index(index) {}
-        Iterator(Iterator&&) = default;
-        Iterator(Iterator&) = default;
-        Iterator(const Iterator&) = default;
-        
-        Iterator begin() const {
-            return Iterator(scene, objects, 0);
-        }
-        
-        Iterator end() const {
-            return Iterator(scene, objects, objects.size());
-        }
-        
-        Iterator& operator++() { ++index; return *this; }
-        bool operator!=(const Iterator & other) const { return index != other.index; }
-        const GameObject operator*() const { return GameObject(scene, objects[index]); }
-    
-        size_t index;
-        Scene& scene;
-        std::vector<GameObjectId>& objects;
-    };
-    
-    const Iterator Objects() {
-        return Iterator(*scene, objects.objects, 0);
+    const GameObjectIterator Objects() {
+        return GameObjectIterator(*scene, objects.objects, 0);
     }
     
 protected:

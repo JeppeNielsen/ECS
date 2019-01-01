@@ -46,6 +46,9 @@ public:
     template<typename Func>
     void IterateComponents(Func&& func) const;
     
+    template<typename Func>
+    void IterateComponentsWithIndex(Func&& func) const;
+    
     void Remove() const;
     
     Hierarchy& Hierarchy() const;

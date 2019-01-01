@@ -88,27 +88,14 @@ ScriptWorld::~ScriptWorld() {
 
 void ScriptWorld::Clear() {
     RemoveFromDatabase();
-    if (!interpreter) {
-        return;
-    }
-    delete interpreter;
-    interpreter = nullptr;
 }
 
 void ScriptWorld::Initialize(const std::string& clingPath, const std::vector<std::string>& includePaths) {
 
+    this->clingPath = clingPath;
     this->includePaths = includePaths;
 
-    std::vector<const char*> arguments;
-
-    arguments.push_back(" ");///Users/Jeppe/Downloads/cling_2018-12-25_mac1012/include/");
-    arguments.push_back("-std=c++14");
     
-    interpreter = new cling::Interpreter((int)arguments.size(), &arguments[0], clingPath.c_str(), true);
-    
-    for(const auto& includePath : includePaths) {
-        interpreter->AddIncludePath(includePath);
-    }
 }
 
 void ScriptWorld::RemoveFromDatabase() {
@@ -118,11 +105,28 @@ void ScriptWorld::RemoveFromDatabase() {
     }
     createdComponentIds.clear();
     database = nullptr;
+    if (interpreter) {
+        delete interpreter;
+        interpreter = nullptr;
+    }
 }
 
 void ScriptWorld::Compile(Database& database, const std::vector<std::string> &cppFiles) {
     RemoveFromDatabase();
     this->database = &database;
+    
+    {
+        std::vector<const char*> arguments;
+
+        arguments.push_back(" ");///Users/Jeppe/Downloads/cling_2018-12-25_mac1012/include/");
+        arguments.push_back("-std=c++14");
+        
+        interpreter = new cling::Interpreter((int)arguments.size(), &arguments[0], clingPath.c_str(), true);
+        
+        for(const auto& includePath : includePaths) {
+            interpreter->AddIncludePath(includePath);
+        }
+    }
     
     //std::vector<std::string> includePaths;
     //includePaths.push_back("/Projects/ECS/ECS/TestClang");
@@ -158,7 +162,7 @@ void ScriptWorld::Compile(Database& database, const std::vector<std::string> &cp
         }
     }
     scriptComponentIndexCounter++;
-    int startComponentIndex = scriptComponentIndexCounter;
+    startComponentIndex = scriptComponentIndexCounter;
     for(auto s : extractor.components) {
         scriptComponents.push_back(std::make_pair(s.name, scriptComponentIndexCounter++));
     }
@@ -183,9 +187,11 @@ void ScriptWorld::Compile(Database& database, const std::vector<std::string> &cp
     
     allCode += code_AddGetRemove;
     
-    FileHelper::ParseFile(cppFiles[0], [&allCode] (const auto& line) {
-        allCode += line + "\n";
-    });
+    for(auto& cppFile : cppFiles) {
+        FileHelper::ParseFile(cppFile, [&allCode] (const auto& line) {
+            allCode += line + "\n";
+        });
+    }
     
     allCode += code_CreateComponent +
         code_RemoveComponent +
@@ -205,9 +211,10 @@ void ScriptWorld::Compile(Database& database, const std::vector<std::string> &cp
         createdComponentIds.push_back(componentId);
         database.AddCustomComponent(componentId, new ScriptContainer(componentId, createComponent, removeComponent, getTypeFunction), allComponents[componentId].first);
     }
+    endComponentIndex = scriptComponentIndexCounter;
 }
 
-void ScriptWorld::AddScene(ECS::Scene &scene) {
+void ScriptWorld::AddScene(ECS::Scene &scene, const SerializedScene& serializedScene) {
     auto getNumSystems = GetFunction<int()>(*interpreter, "GetNumSystems");
     auto createSystem = GetFunction<ISystem*(int)>(*interpreter, "CreateSystem");
     
@@ -217,14 +224,37 @@ void ScriptWorld::AddScene(ECS::Scene &scene) {
     for (int systemId = 0; systemId<numSystems; ++systemId) {
         scene.AddCustomSystem(maxSystemIndex + systemId, createSystem(systemId));
     }
+    
+    serializedScene.Deserialize(scene);
+    scene.Update(0.0f);
 }
 
-void ScriptWorld::RemoveScene(ECS::Scene &scene) {
+SerializedScene ScriptWorld::RemoveScene(ECS::Scene &scene) {
     auto getNumSystems = GetFunction<int()>(*interpreter, "GetNumSystems");
     auto removeSystem = GetFunction<void(ISystem*, int)>(*interpreter, "RemoveSystem");
     
+    SerializedScene serializedScene;
+    serializedScene.Serialize(scene, [this](auto componentId) {
+        return componentId >= startComponentIndex && componentId < endComponentIndex;
+    });
+    
+    for(auto go : scene.Objects()) {
+        for (int componentId = startComponentIndex; componentId<endComponentIndex; ++componentId) {
+            if (go.GetComponent(componentId)!=nullptr) {
+                go.RemoveComponent(componentId);
+            }
+        }
+    }
+    
+    scene.Update(0.0f);
+    
     int numSystems = getNumSystems();
-
+    int maxSystemIndex = scene.GetMaxSystemIndex() - numSystems;
+    
+    for (int systemId = 0; systemId<numSystems; ++systemId) {
+        scene.RemoveCustomSystem(maxSystemIndex + systemId);
+    }
+    return serializedScene;
 }
 
 std::vector<std::string> split(const std::string& s, const std::string& seperator) {
@@ -271,14 +301,6 @@ std::string ScriptWorld::Code_AddGetRemoveComponent(const ComponentNameIndicies&
         code << "template<> void ECS::GameObject::RemoveComponent<class "+componentName+">() const { RemoveComponent("<<index<<"); }"<<std::endl;
     }
     return code.str();
-}
-
-
-void* CreateComponent(int componentId) {
-    switch (componentId) {
-        case 21: return new int();
-    }
-    return nullptr;
 }
 
 std::string ScriptWorld::Code_CreateComponent(const ComponentNameIndicies& componentNameIndices) {

@@ -9,14 +9,17 @@
 #pragma once
 #include "GameObject.hpp"
 #include <ostream>
+#include <functional>
 #include "minijson_writer.hpp"
 
 namespace ECS {
 class JsonSerializer {
 public:
     JsonSerializer();
-    void SerializeObject(GameObject go, std::ostream& stream);
+    void SerializeObject(GameObject go, std::ostream& stream, const std::function<bool(int)>& componentFilter = nullptr);
+    void SerializeComponents(GameObject go, std::ostream& stream, const std::function<bool(int)>& componentFilter = nullptr);
 private:
-    void Serialize(GameObject go, minijson::object_writer& writer);
+    void Serialize(GameObject go, minijson::object_writer& writer, const std::function<bool(int)>& componentFilter);
+    void SerializeComponentsInternal(GameObject go, minijson::object_writer& writer, const std::function<bool(int)>& componentFilter);
 };
 }
