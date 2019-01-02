@@ -23,7 +23,7 @@ namespace ECS {
     public:
         ~ScriptWorld();
     
-        void Initialize(const std::string& clingPath, const std::vector<std::string>& includePaths);
+        void Initialize(const std::string& clangPath, const std::vector<std::string>& includePaths);
         void Compile(Database& database, const std::vector<std::string>& cppFiles);
         void RemoveFromDatabase();
         void Clear();
@@ -42,7 +42,7 @@ namespace ECS {
         std::string Code_CreateSystem(SystemComponentExtractor::Systems systems);
         std::string Code_RemoveSystem(SystemComponentExtractor::Systems systems);
         
-        std::string clingPath;
+        std::string clangPath;
         std::vector<std::string> includePaths;
         cling::Interpreter* interpreter = nullptr;
         Database* database = nullptr;

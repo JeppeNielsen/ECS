@@ -22,22 +22,13 @@ void SystemComponentExtractor::Clear() {
 
 CXChildVisitResult parseCode(CXCursor cursor, CXCursor parent, CXClientData clientData);
 
-bool SystemComponentExtractor::Extract(const std::vector<std::string> &cppFiles, const std::vector<std::string> &includePaths, const std::function<bool(const std::string&)>& predicate) {
+bool SystemComponentExtractor::Extract(const std::string& clangPath, const std::vector<std::string> &cppFiles, const std::vector<std::string> &includePaths, const std::function<bool(const std::string&)>& predicate) {
     std::vector<std::string> arguments;
     arguments.push_back("c++");
     arguments.push_back("-std=c++14");
     arguments.push_back("-stdlib=libc++");
-    arguments.push_back("-I/Users/Jeppe/Downloads/clang+llvm-3.7.0-x86_64-apple-darwin/include/c++/v1");
-    arguments.push_back("-I/usr/include");
-    arguments.push_back("-I/usr/include/c++/4.2.1/");
-    arguments.push_back("-I/Users/Jeppe/Downloads/clang+llvm-3.7.0-x86_64-apple-darwin/lib/clang/3.7.0/include");
-    /*
-    arguments.push_back("-I/Projects/ECS/ECS/ECS");
-    arguments.push_back("-I/Projects/ECS/ECS/Reflection");
-    arguments.push_back("-I/Projects/ECS/ECS/Serialization");
-    arguments.push_back("-I/Projects/ECS/ECS/Json");
-    arguments.push_back("-I/Projects/ECS/ECS/Helpers");
-    */
+    arguments.push_back("-I" + clangPath + "/include/c++/v1" );
+    arguments.push_back("-I" + clangPath + "/lib/clang/7.0.0/include" );
     
     for(const auto& includePath : includePaths) {
         std::string extraPath = "-I" + includePath;
@@ -183,16 +174,3 @@ CXChildVisitResult parseCode(CXCursor cursor, CXCursor parent, CXClientData clie
     
     return CXChildVisit_Recurse;
 }
-
-
-/*
-std::vector<std::string> split(const std::string &s, char delim) {
-    std::vector<std::string> elems;
-    std::stringstream ss(s);
-    std::string item;
-    while (std::getline(ss, item, delim)) {
-        elems.push_back(item);
-    }
-    return elems;
-}
-*/

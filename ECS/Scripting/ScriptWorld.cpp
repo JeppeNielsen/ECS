@@ -90,12 +90,9 @@ void ScriptWorld::Clear() {
     RemoveFromDatabase();
 }
 
-void ScriptWorld::Initialize(const std::string& clingPath, const std::vector<std::string>& includePaths) {
-
-    this->clingPath = clingPath;
+void ScriptWorld::Initialize(const std::string& clangPath, const std::vector<std::string>& includePaths) {
+    this->clangPath = clangPath;
     this->includePaths = includePaths;
-
-    
 }
 
 void ScriptWorld::RemoveFromDatabase() {
@@ -116,24 +113,26 @@ void ScriptWorld::Compile(Database& database, const std::vector<std::string> &cp
     this->database = &database;
     
     {
-        std::vector<const char*> arguments;
+        std::vector<std::string> arguments;
 
-        arguments.push_back(" ");///Users/Jeppe/Downloads/cling_2018-12-25_mac1012/include/");
+        arguments.push_back(" ");
         arguments.push_back("-std=c++14");
+        arguments.push_back("-I" + clangPath + "/lib/clang/7.0.0/include" );
         
-        interpreter = new cling::Interpreter((int)arguments.size(), &arguments[0], clingPath.c_str(), true);
+        std::vector<const char*> argumentsList;
+        for(auto& s : arguments) {
+            argumentsList.push_back(s.c_str());
+        }
+        
+        interpreter = new cling::Interpreter((int)argumentsList.size(), &argumentsList[0], nullptr, true);
         
         for(const auto& includePath : includePaths) {
             interpreter->AddIncludePath(includePath);
         }
     }
     
-    //std::vector<std::string> includePaths;
-    //includePaths.push_back("/Projects/ECS/ECS/TestClang");
-   // includePaths.push_back("/Projects/ECS/ECS/ECS");
-    
     SystemComponentExtractor extractor;
-    extractor.Extract(cppFiles, includePaths, [](const auto& componentName){
+    extractor.Extract(clangPath, cppFiles, includePaths, [](const auto& componentName){
         return true;
     });
 

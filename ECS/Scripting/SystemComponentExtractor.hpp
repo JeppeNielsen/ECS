@@ -15,7 +15,7 @@
 namespace ECS {
     class SystemComponentExtractor {
     public:
-        bool Extract(const std::vector<std::string>& cppFiles, const std::vector<std::string>& includePaths, const std::function<bool(const std::string&)>& predicate);
+        bool Extract(const std::string& clangPath, const std::vector<std::string>& cppFiles, const std::vector<std::string>& includePaths, const std::function<bool(const std::string&)>& predicate);
         
         struct System {
             std::string name;

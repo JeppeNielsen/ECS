@@ -39,7 +39,7 @@ int main() {
 
     ScriptWorld scriptWorld;
     
-    scriptWorld.Initialize("/Projects/ECS/cling", includePaths);
+    scriptWorld.Initialize("/Projects/ECS/clang", includePaths);
     
     scriptWorld.Compile(database, {"/Projects/ECS/ECS/TestClang/game.cpp"});
    
@@ -108,7 +108,7 @@ int main_extract()
     
     
     SystemComponentExtractor extractor;
-    extractor.Extract({"/Projects/ECS/ECS/TestClang/game.cpp"}, includePaths, [](auto& s) {
+    extractor.Extract("", {"/Projects/ECS/ECS/TestClang/game.cpp"}, includePaths, [](auto& s) {
         return true;
     });
     

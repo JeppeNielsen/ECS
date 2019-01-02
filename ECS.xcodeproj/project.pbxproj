@@ -22,7 +22,6 @@
 		7216B12C21D8402900EB4748 /* FileHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B12A21D8402900EB4748 /* FileHelper.cpp */; };
 		7216B12F21DBA2AA00EB4748 /* SerializedScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B12D21DBA2AA00EB4748 /* SerializedScene.cpp */; };
 		7216B13221DBA81700EB4748 /* GameObjectIterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B13021DBA81700EB4748 /* GameObjectIterator.cpp */; };
-		7216B13421DBFB9A00EB4748 /* game2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7216B13321DBFB9A00EB4748 /* game2.cpp */; };
 		726CB221210509E4009E1412 /* ecs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 726CB21F210509E4009E1412 /* ecs.cpp */; };
 		72A86D8621091268001BCF6B /* ObjectList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D8421091268001BCF6B /* ObjectList.cpp */; };
 		72A86D8921091451001BCF6B /* Database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A86D8721091451001BCF6B /* Database.cpp */; };
@@ -349,7 +348,6 @@
 				72A86DB6215675C1001BCF6B /* TestECS.cpp in Sources */,
 				72A86D8621091268001BCF6B /* ObjectList.cpp in Sources */,
 				7216B12C21D8402900EB4748 /* FileHelper.cpp in Sources */,
-				7216B13421DBFB9A00EB4748 /* game2.cpp in Sources */,
 				7216B12921D6D0B400EB4748 /* ScriptWorld.cpp in Sources */,
 				7216B0CA21B076DC00EB4748 /* FieldInfo.cpp in Sources */,
 				7216B13221DBA81700EB4748 /* GameObjectIterator.cpp in Sources */,
