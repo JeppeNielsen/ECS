@@ -26,6 +26,14 @@ void TestECS::Run() {
         return (bool)gameObject;
     });
     
+    RunTest("GameObject == operator", [] () -> bool {
+        Database database;
+        Scene scene(database);
+        GameObject gameObject = scene.CreateObject();
+        GameObject gameObject2 = gameObject;
+        return gameObject == gameObject2;
+    });
+    
     RunTest("Remove GameObject", [] () -> bool {
         Database database;
         Scene scene(database);
@@ -73,7 +81,7 @@ void TestECS::Run() {
         gameObject.AddComponent<Component>(123);
         gameObject.RemoveComponent<Component>();
         scene.Update(0.0f);
-        return !gameObject.GetComponent<Component>();
+        return gameObject.GetComponent<Component>() == nullptr;
     });
     
     RunTest("AddReferenceComponent", [] () -> bool {
@@ -187,4 +195,63 @@ void TestECS::Run() {
         }
         return addedCounter == 1 && removedCounter == 1;
     });
+    
+     RunTest("Add and remove object from System in same update", [] () -> bool {
+         struct Transform { int pos; };
+         struct Renderable { int image; };
+         struct RenderSystem : System<Transform, Renderable> {
+             int numAdded = 0;
+             int numRemoved = 0;
+         
+             void ObjectAdded(GameObject go) override {
+                 numAdded++;
+             }
+             
+             void ObjectRemoved(GameObject go) override {
+                 numRemoved++;
+             }
+         };
+         
+         Database database;
+         Scene scene(database);
+         
+         auto& renderSystem = scene.CreateSystem<RenderSystem>();
+         
+         GameObject go = scene.CreateObject();
+         
+         go.AddComponent<Transform>(12);
+         go.AddComponent<Renderable>(12);
+         
+         go.RemoveComponent<Transform>();
+         go.RemoveComponent<Renderable>();
+         
+         scene.Update(0.0f);
+         return renderSystem.numAdded == 1 &&
+             renderSystem.numRemoved == 1;
+     });
+    
+    RunTest("Scene::Objects iteration", [] () -> bool {
+        struct Component1 { int data;};
+        struct Component2 { int data2;};
+        
+        Database database;
+        Scene scene(database);
+        
+        std::vector<GameObject> objects;
+        for(int i=0;i<10; i++) {
+            auto go = scene.CreateObject();
+            go.AddComponent<Component1>();
+            objects.push_back(go);
+        }
+        
+        bool match = true;
+        for(auto go : scene.Objects()) {
+            auto it = std::find(objects.begin(), objects.end(), go);
+            if (it == objects.end()) {
+                match = false;
+            }
+        }
+        return match;
+     });
+    
 }
