@@ -73,7 +73,7 @@ private:
     template<typename T>
     T* GetComponent(const GameObjectId objectId) const {
         const auto componentId = IdHelper::GetId<T>();
-        if (componentId>=componentsIndexed.size()) return nullptr;
+        if (componentId>=componentsIndexed.size() || !componentsIndexed[componentId]) return nullptr;
         auto& container = ComponentContainer<T>();
         return container.Contains(objectId) ? container.Get(objectId) : nullptr;
     }
