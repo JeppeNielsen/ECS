@@ -19,7 +19,7 @@
 using namespace ECS;
 
 
-int main() {
+int main_scripting() {
 
     Database database;
     database.AssureComponent<Hierarchy>();
@@ -35,7 +35,6 @@ int main() {
         "/Projects/ECS/ECS/Helpers/",
         "/Projects/ECS/ECS/TestClang/",
     };
-
 
     ScriptWorld scriptWorld;
     
