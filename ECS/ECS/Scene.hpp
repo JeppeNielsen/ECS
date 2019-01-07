@@ -39,7 +39,8 @@ public:
         if (!systemsIndexed[systemId]) {
             systemsIndexed[systemId] = std::make_unique<S>();
             S& system = static_cast<S&>(*systemsIndexed[systemId]);
-            system.Initialize(*this);
+            system.InitializeComponents(*this);
+            system.Initialize();
             systems.push_back(&system);
             return system;
         } else {
@@ -148,8 +149,9 @@ void GameObject::IterateComponentsWithIndex(Func&& func) const {
 }
 
 template<typename...T>
-void System<T...>::Initialize(Scene& scene) {
-    this->scene = &scene;
+void System<T...>::InitializeComponents(Scene& scene) {
+    Scene** scenePtr = ((Scene**)&this->scene);
+    *(scenePtr) = &scene;
     components = std::make_unique<Components>((scene.GetDatabase().AssureComponent<T>(), System<T...>::GetPointer<T>())...);
 }
   

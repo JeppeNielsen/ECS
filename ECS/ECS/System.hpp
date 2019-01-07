@@ -19,9 +19,10 @@ namespace ECS {
 class ISystem {
 public:
     virtual ~ISystem() = default;
+    virtual void Initialize() = 0;
+    virtual void InitializeComponents(Scene* scene) = 0;
     virtual void TryAddObject(const GameObjectId object) = 0;
     virtual void TryRemoveObject(const GameObjectId object) = 0;
-    virtual void InitializeComponents(Scene* scene) = 0;
     virtual void Update(float dt) = 0;
     ObjectList objects;
 };
@@ -30,11 +31,14 @@ template<typename...T>
 class System : public ISystem {
 public:
     using Components = std::tuple<T*...>;
+    
+    void Initialize() override { }
 
-    void Initialize(Scene& scene);
+    void InitializeComponents(Scene& scene);
     
     void InitializeComponents(Scene* scene) override {
-        this->scene = scene;
+        Scene** scenePtr = ((Scene**)&this->scene);
+        *(scenePtr) = scene;
         components = std::make_unique<Components>(GetPointer<T>()...);
     }
 
@@ -68,7 +72,7 @@ protected:
     virtual void ObjectAdded(GameObject object) {}
     virtual void ObjectRemoved(GameObject object) {}
     virtual void Update(float dt) override {}
-    Scene* scene;
+    Scene* const scene = nullptr;
 private:
     template<typename TPointer> TPointer* GetPointer() { return nullptr; }
     std::unique_ptr<Components> components;
