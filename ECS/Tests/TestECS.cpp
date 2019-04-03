@@ -254,4 +254,60 @@ void TestECS::Run() {
         return match;
      });
     
+    
+     RunTest("System::ObjectRemoved, two systems, 3 components", [] () -> bool {
+        using List = std::vector<GameObject>;
+        List objectsRemoved;
+        struct Transform {int x;};
+        struct Velocity {int x;};
+        struct Rotatable {int x;};
+        
+        struct VelocitySystem : public ECS::System<Transform, Velocity> {
+            int removedCounter = 0;
+            int addedCounter = 0;
+            
+            void ObjectAdded(GameObject object) {
+                addedCounter++;
+            }
+            
+            void ObjectRemoved(GameObject object) {
+                removedCounter++;
+            }
+        };
+        
+        struct RotateSystem : public ECS::System<Transform, Rotatable> {
+            int removedCounter = 0;
+            int addedCounter = 0;
+            
+            void ObjectAdded(GameObject object) {
+                addedCounter++;
+            }
+            
+            void ObjectRemoved(GameObject object) {
+                removedCounter++;
+            }
+        };
+        Database database;
+        Scene scene(database);
+        auto& velocitySystem = scene.CreateSystem<VelocitySystem>();
+        auto& rotationSystem = scene.CreateSystem<RotateSystem>();
+        
+        auto object = scene.CreateObject();
+        object.AddComponent<Transform>();
+        object.AddComponent<Velocity>();
+        object.AddComponent<Rotatable>();
+        
+        scene.Update(0.0f);
+        
+        bool bothAdded = velocitySystem.addedCounter == 1 && rotationSystem.addedCounter == 1;
+        
+        object.RemoveComponent<Rotatable>();
+        
+        scene.Update(0.0f);
+        
+        bool onlyOneRemoved = velocitySystem.removedCounter == 0 && rotationSystem.removedCounter == 1;
+        
+        return bothAdded && onlyOneRemoved;
+    });
+    
 }
