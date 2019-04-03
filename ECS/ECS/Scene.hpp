@@ -20,7 +20,6 @@ class Scene {
     using SystemIdHelper = IdHelper<struct SystemIdHelper>;
     using SystemsIndexed = std::vector<std::unique_ptr<ISystem>>;
     using Systems = std::vector<ISystem*>;
-    
     using Actions = std::set<GameObjectId>;
     using RemoveComponentActions = std::set<std::pair<GameObjectId, size_t>>;
     
@@ -39,7 +38,7 @@ public:
         if (!systemsIndexed[systemId]) {
             systemsIndexed[systemId] = std::make_unique<S>();
             S& system = static_cast<S&>(*systemsIndexed[systemId]);
-            system.InitializeComponents(*this);
+            system.InitializeComponents(*this, componentSystemLists);
             system.Initialize();
             systems.push_back(&system);
             return system;
@@ -94,9 +93,9 @@ private:
         actions.clear();
     }
     
-    void AddComponent(GameObjectId objectId, int componentId);
-    void* GetComponent(GameObjectId objectId, int componentId);
-    void RemoveComponent(GameObjectId objectId, int componentId);
+    void AddComponent(GameObjectId objectId, const std::size_t componentId);
+    void* GetComponent(GameObjectId objectId, const std::size_t componentId);
+    void RemoveComponent(GameObjectId objectId, const std::size_t componentId);
     
     void UpdateSystems(float dt);
     void RemoveObjectFromDatabase(const GameObjectId object);
@@ -104,6 +103,8 @@ private:
     Database& database;
     SystemsIndexed systemsIndexed;
     Systems systems;
+    ISystem::ComponentSystemLists componentSystemLists;
+    
     ObjectList objects;
     Actions addComponentActions;
     RemoveComponentActions removeComponentActions;
@@ -149,10 +150,11 @@ void GameObject::IterateComponentsWithIndex(Func&& func) const {
 }
 
 template<typename...T>
-void System<T...>::InitializeComponents(Scene& scene) {
+void System<T...>::InitializeComponents(Scene& scene, ComponentSystemLists& componentSystemLists) {
     Scene** scenePtr = ((Scene**)&this->scene);
     *(scenePtr) = &scene;
     components = std::make_unique<Components>((scene.GetDatabase().AssureComponent<T>(), System<T...>::GetPointer<T>())...);
+    PopulateComponentSystemLists(componentSystemLists);
 }
   
 }
