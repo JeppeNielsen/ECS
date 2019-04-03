@@ -31,6 +31,13 @@ bool GameObject::operator != (const GameObject& other) const {
     return !(id == other.id && scene == other.scene);
 }
 
+bool GameObject::operator < (const GameObject& other) const {
+    if (scene == other.scene) {
+        return id < other.id;
+    }
+    return scene < other.scene;
+}
+
 GameObject::operator bool() const {
     if (!scene) return false;
     return scene->database.GameObjectIdValid(id);

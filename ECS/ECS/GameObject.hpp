@@ -28,6 +28,7 @@ public:
     
     bool operator == (const GameObject& other) const;
     bool operator != (const GameObject& other) const;
+    bool operator < (const GameObject& other) const;
     
     explicit operator bool() const;
     
