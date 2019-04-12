@@ -13,6 +13,7 @@
 #include "GameObject.hpp"
 #include "MetaHelper.hpp"
 #include "GameObjectIterator.hpp"
+#include "Database.hpp"
 
 namespace ECS {
 
